@@ -1,0 +1,20 @@
+.homepage-title{
+    font-size: 100%;
+}
+
+input[type="text"] {
+    width: 100%; /* Make the input field take the full width */
+    padding: 10px; /* Add some padding for better spacing */
+    margin: 10px 0; /* Add some margin for spacing between elements */
+    border: 2px solid #ccc; /* Light gray border */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 16px; /* Increase font size */
+    color: #333; /* Dark text color */
+    background-color: #f9f9f9; /* Light background color */
+}
+
+input[type="text"]:focus {
+    border-color: #0070f3; /* Change border color on focus */
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 5px rgba(0, 112, 243, 0.5); /* Add a subtle shadow on focus */
+}
