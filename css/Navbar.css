@@ -1,0 +1,58 @@
+.navbar-body{
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  gap: 30%;
+  align-items: center;
+  justify-content: center;
+  padding: 1%;
+}
+
+.navbar-kiri{
+  display: flex;
+  flex-direction: row;
+  gap: 10%;
+}
+
+.navbar-tengah{
+  display: flex;
+  flex-direction: row;
+  gap: 10%;
+}
+
+.navbar-kanan{
+  display: flex;
+  flex-direction: row;
+  gap: 10%;
+}
+
+.navbar-tulisan-hitam-bold{
+  color: black;
+  font-weight: bold;
+  padding: 5px;
+}
+
+.navbar-tulisan-hitam{
+  color: black;
+  padding: 5px;
+  border-radius: 5px;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.navbar-tulisan-merah{
+  color: red;
+  padding: 5px;
+}
+
+#daftar:hover {
+  color: white;
+  background-color: red;
+  padding: 5px;
+}
+
+#masuk:hover {
+  color: white;
+  background-color: red;
+  padding: 5px;
+}
+

@@ -1,0 +1,16 @@
+.homepage-body{
+    height: 100vh;
+}
+
+
+.homepage-section1{
+    width: 100%;
+    height: 80%;
+    background-color: red;
+}
+
+.homepage-section2{
+    width: 100%;
+    height: 80%;
+    background-color: blue;
+}
