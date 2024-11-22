@@ -1,14 +1,14 @@
-.homepage-body{
+.detailmuseum-body{
     height: 100vh;
 }
 
-.homepage-section1{
+.detailmuseum-section1{
     width: 100%;
     height: 80%;
     background-color: red;
 }
 
-.homepage-section2{
+.detailmuseum-section2{
     width: 100%;
     height: 80%;
     background-color: blue;

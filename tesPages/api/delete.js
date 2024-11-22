@@ -1,5 +1,5 @@
 // pages/api/delete.js
-import pool from '../../db/db'; 
+import pool from '../../tesDb/db'; 
 
 export default async function handler(req, res) {
   try {

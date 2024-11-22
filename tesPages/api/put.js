@@ -1,5 +1,5 @@
 // pages/api/put.js
-import pool from '../../db/db'; // Adjust the path as needed
+import pool from '../../tesDb/db'; 
 
 export default async function handler(req, res) {
   try {
