@@ -1,0 +1,15 @@
+.myticket-body{
+    height: 100vh;
+}
+
+.myticket-section1{
+    width: 100%;
+    height: 80%;
+    background-color: red;
+}
+
+.myticket-section2{
+    width: 100%;
+    height: 80%;
+    background-color: blue;
+}

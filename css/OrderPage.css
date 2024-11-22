@@ -1,0 +1,15 @@
+.orderpage-body{
+    height: 100vh;
+}
+
+.orderpage-section1{
+    width: 100%;
+    height: 80%;
+    background-color: red;
+}
+
+.orderpagem-section2{
+    width: 100%;
+    height: 80%;
+    background-color: blue;
+}
