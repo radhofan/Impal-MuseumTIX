@@ -1,0 +1,15 @@
+.loginRegist-body{
+    height: 100vh;
+}
+
+.loginRegist-section1{
+    width: 100%;
+    height: 80%;
+    background-color: red;
+}
+
+.loginRegist-section2{
+    width: 100%;
+    height: 80%;
+    background-color: blue;
+}

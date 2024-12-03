@@ -9,7 +9,9 @@ function OrderPage() {
   return (
     <div className='orderpage-body'>
         <Navbar/>
-        <div className='orderpage-section1'></div>
+          <div className='orderpage-section1'>
+            
+          </div>
         <Footer/>
     </div>
   )
