@@ -10,13 +10,14 @@ const Navbar = () => {
         </div>
 
         <div className='navbar-tengah'>
-            <div className='navbar-tulisan-merah'>Beranda</div>
-            <div className='navbar-tulisan-hitam'>Keranjang</div>
+            <div className='navbar-tulisan'>Home</div>
+            <div className='navbar-tulisan'>My Ticket</div>
+            <div className='navbar-tulisan'>Order</div>
         </div>
 
         <div className='navbar-kanan'>
-            <div className='navbar-tulisan-hitam' id='daftar'>Daftar</div>
-            <div className='navbar-tulisan-hitam' id='masuk'>Masuk</div>
+            <div className='navbar-tulisan' id='daftar'>Daftar</div>
+            <div className='navbar-tulisan' id='masuk'>Masuk</div>
         </div>
 
     </div>

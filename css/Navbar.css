@@ -32,6 +32,14 @@
   padding: 5px;
 }
 
+.navbar-tulisan{
+  color: black;
+  padding: 5px;
+  border-radius: 5px;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  white-space: nowrap;
+}
+
 .navbar-tulisan-hitam{
   color: black;
   padding: 5px;
