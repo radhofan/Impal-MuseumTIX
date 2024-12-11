@@ -1,14 +1,14 @@
-.loginRegist-body{
+.login-body{
     height: 100vh;
 }
 
-.loginRegist-section1{
+.login-section1{
     width: 100%;
     height: 80%;
-    background-color: red;
+    background-image: url('../image/a.jpg');
 }
 
-.loginRegist-section2{
+.login-section2{
     width: 100%;
     height: 80%;
     background-color: blue;

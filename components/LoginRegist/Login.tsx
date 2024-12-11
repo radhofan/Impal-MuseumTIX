@@ -1,16 +1,16 @@
 import React from 'react'
 
-import '@/css/LoginRegist.css'
+import '@/css/Login.css'
 
 
 import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
 
-function LoginRegist() {
+function Login() {
   return (
-    <div className='loginRegist-body'>
+    <div className='login-body'>
       <Navbar/>
-        <div className='loginRegist-section1'>
+        <div className='login-section1'>
           
         </div>
       <Footer/>
@@ -18,4 +18,4 @@ function LoginRegist() {
   )
 }
 
-export default LoginRegist
+export default Login

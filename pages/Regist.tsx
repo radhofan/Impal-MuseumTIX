@@ -1,10 +1,10 @@
 import React from 'react';
 
 import '@/app/globals.css'; // Your global styles
-import LoginRegist from '@/components/LoginRegist/LoginRegist';
+import Regist from '@/components/LoginRegist/Regist';
 
 const loginRegistWrapper = () => {
-  return <LoginRegist />;
+  return <Regist />;
 };
 
 export default loginRegistWrapper;
