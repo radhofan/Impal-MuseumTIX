@@ -1,0 +1,15 @@
+.Regist-body{
+    height: 100vh;
+}
+
+.Regist-section1{
+    width: 100%;
+    height: 80%;
+    background-color: red;
+}
+
+.Regist-section2{
+    width: 100%;
+    height: 80%;
+    background-color: blue;
+}
