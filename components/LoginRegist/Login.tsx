@@ -37,7 +37,7 @@ function Login() {
 
       if (response.ok) {
         const userData = await response.json();
-        
+        console.log(userData); 
 
         localStorage.setItem('user', JSON.stringify(userData));  
 

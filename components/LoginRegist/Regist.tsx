@@ -47,7 +47,7 @@ function Regist() {
   
         if (loginResponse.ok) {
           const userData = await loginResponse.json();
-  
+          console.log(userData);
           localStorage.setItem('user', JSON.stringify(userData));
 
           router.push('/HomePage');
