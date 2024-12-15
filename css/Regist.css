@@ -90,6 +90,7 @@
     border: 1px solid #ffffff;
     border-radius: 5px;
     width: calc(50% - 10px); /* Setengah lebar untuk input nama */
+    color: black;
   }
 
   .form-group:nth-child(2) .form-input {
