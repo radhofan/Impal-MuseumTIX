@@ -91,7 +91,7 @@ function OrderPage() {
   };
 
   const displayTicketName = () => {
-    if (keranjang?.jenis_tiket === 'Tiket Anak') return 'Tiket Anak';
+    if (keranjang?.jenis_tiket === 'Tiket Pelajar') return 'Tiket Pelajar';
     if (keranjang?.jenis_tiket === 'Tiket Keluarga') return 'Tiket Keluarga';
     if (keranjang?.jenis_tiket === 'Tiket Reguler') return 'Tiket Reguler';
     return 'Ticket Not Selected';
@@ -187,11 +187,11 @@ function OrderPage() {
             <div className="ticket-item">
               <input
                 type="radio"
-                id="ticketAnak"
+                id="ticketPelajar"
                 name="ticket"
-                value="Tiket Anak"
-                checked={keranjang?.jenis_tiket === 'Tiket Anak'}
-                onChange={() => handleTicketSelection('Tiket Anak')}
+                value="Tiket Pelajar"
+                checked={keranjang?.jenis_tiket === 'Tiket Pelajar'}
+                onChange={() => handleTicketSelection('Tiket Pelajar')}
               />
               <label htmlFor="ticketAnak">Tiket Pelajar - {keranjang?.museum.tiketPelajar_price}</label>
             </div>
