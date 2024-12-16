@@ -1,4 +1,3 @@
-// Updated DetailMuseum.tsx
 import React, { useState } from 'react';
 
 import '@/app/globals.css'; 
@@ -9,10 +8,6 @@ import Footer from '@/components/Global/Footer';
 import Image from 'next/image';
 
 function DetailMuseum() {
-  const [regularTickets, setRegularTickets] = useState(1);
-  const [familyTickets, setFamilyTickets] = useState(0);
-  const [childTickets, setChildTickets] = useState(4);
-
   return (
     <div className="detailmuseum-body">
       <Navbar />
@@ -50,37 +45,38 @@ function DetailMuseum() {
           </div>
         </div>
 
-        {/* Reviews Section */}
-        <div className="reviews">
-          <h3 className="reviews-title">Reviews for Museum Geologi</h3>
-          {[
-            {
-              name: 'Hakam Jawa',
-              rating: 4,
-              comment:
-                'This museum is amazing! The collection is rich and informative, with modern and interactive exhibits. The staff are friendly, the atmosphere is welcoming, and it\'s perfect for learning while enjoying art and history.',
-            },
-            {
-              name: 'Azmi Pecel',
-              rating: 4,
-              comment:
-                'This museum is very fascinating! Each exhibit is well-organized and tells a story, making the visit even more memorable. A must-visit place for art and history enthusiasts!',
-            },
-            {
-              name: 'Rado Depok',
-              rating: 4,
-              comment:
-                'This museum is very fascinating! Each exhibit is well-organized and tells a story, making the visit even more memorable. A must-visit place for art and history enthusiasts!',
-            },
-          ].map((review, index) => (
-            <div key={index} className="review-card">
-              <p className="review-card-title">
-                <strong>{review.name}</strong> {Array(review.rating).fill('⭐').join('')}
-              </p>
-              <p className="review-comment">"{review.comment}"</p>
+        {/* Ticket Options */}
+        <div className="ticket-options">
+            <div className="ticket-type">
+              <div className="ticket-header">▶ Reguler</div>
+              <div className="ticket-input">
+                Jumlah: <input type="number" value={regularTickets} onChange={(e) => setRegularTickets(Number(e.target.value))} />
+              </div>
             </div>
-          ))}
-        </div>
+            <div className="ticket-type">
+              <div className="ticket-header">▶ Keluarga</div>
+              <div className="ticket-input">
+                {/* Jumlah: <input type="number" value={familyTickets} onChange={(e) => setFamilyTickets(Number(e.target.value))} /> */}
+              </div>
+            </div>
+            <div className="ticket-type">
+              <div className="ticket-header">▶ Anak</div>
+              <div className="ticket-input">
+                Jumlah: <input type="number" value={childTickets} onChange={(e) => setChildTickets(Number(e.target.value))} />
+              </div>
+            </div>
+          </div>
+
+          {/* Summary Section */}
+          <div className="ticket-summary">
+            <h4>Summary:</h4>
+            <p>
+              Location: Museum Geologi | Date: Thu, 21 Nov 2024 | Reguler: {regularTickets} | Anak: {childTickets}
+            </p>
+            <button className="btn primary checkout-btn">Check Out</button>
+          </div>
+
+
       </div>
       <Footer />
     </div>
