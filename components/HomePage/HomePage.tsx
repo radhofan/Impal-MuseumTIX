@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Swiper from 'swiper';
+import Link from 'next/link';
 
 import '../../css/HomePage.css';
 import '../../css/Navbar.css';
@@ -41,7 +42,7 @@ const HomePage = () => {
   //Function Cari Museum
   async function fetchMuseums() {
     try {
-        const response = await fetch("http://localhost:9090/museums/get", {
+        const response = await fetch("http://localhost:9090/museums/getAll", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -184,18 +185,20 @@ const HomePage = () => {
         <div className='homepage-section2-list'>
           {museumsToDisplay.length > 0 ? (
             museumsToDisplay.map((museum, index) => (
-              <div className='card' key={index}>
-                <div className='card-image'></div>
-                <div className='card-info'>
-                  <span className='card-title'>{museum.nama}</span>
-                  <span className='card-address'>{museum.lokasi}</span>
-                  <span className='notelp'>{museum.no_telpon}</span>
-                  <div className='card-rating'>
-                    <span className='star'>⭐</span>
-                    <span className='rating'>{museum.rating}</span>
+              <Link key={index} href={`/DetailMuseum/${museum.museum_id}`} passHref>
+                <div className='card'>
+                  <div className='card-image'></div>
+                  <div className='card-info'>
+                    <span className='card-title'>{museum.nama}</span>
+                    <span className='card-address'>{museum.lokasi}</span>
+                    <span className='notelp'>{museum.no_telpon}</span>
+                    <div className='card-rating'>
+                      <span className='star'>⭐</span>
+                      <span className='rating'>{museum.rating}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))
           ) : (
             <div>No museums found</div>

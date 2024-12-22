@@ -31,7 +31,7 @@ function Regist() {
     e.preventDefault();
   
     try {
-      const response = await axios.post('http://localhost:9090/users/create', formData);
+      const response = await axios.post('http://localhost:9090/users/registrasi', formData);
       if (response.status === 200) {
         console.log("ada")
         setSuccessMessage('Registration successful! You can now log in.');

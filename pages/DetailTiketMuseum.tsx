@@ -1,8 +1,8 @@
 import React from 'react';
-import DetailMuseum from '@/components/DetailMuseum/DetailTiketMuseum';
+import DetailTiketMuseum from '@/components/DetailMuseum/DetailTiketMuseum';
 
 const DetailMuseumWrapper = () => {
-  return <DetailMuseum/>;
+  return <DetailTiketMuseum/>;
 };
 
 export default DetailMuseumWrapper;

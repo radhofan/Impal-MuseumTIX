@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../../css/Navbar.css';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
   const [user, setUser] = useState(null);

@@ -9,7 +9,7 @@ function OrderPage() {
   const [keranjang, setKeranjang] = useState(null);
   const [ticketQuantity, setTicketQuantity] = useState(1);
   const [totalHarga, setTotalHarga] = useState<number | null>(null);
-  
+  const [groupName, setGroupName] = useState(''); // Manage the group name based on ticket type
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -17,7 +17,6 @@ function OrderPage() {
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       const parsedUserId = parseInt(parsedUser.user_id, 10); 
-      console.log('Stored User ID:', parsedUserId); 
       setUserId(parsedUserId); 
     } else {
       console.log('No user found in localStorage'); 
@@ -39,10 +38,9 @@ function OrderPage() {
   
   const fetchKeranjang = async (id: number) => {
     try {
-      const response = await axios.get(`http://localhost:9090/users/${id}/getKeranjang`);
+      const response = await axios.get(`http://localhost:9090/keranjangs/getKeranjang/${id}`);
       setKeranjang(response.data);
       setTicketQuantity(response.data.jumlahTiket || 1);
-      console.log(response.data);
     } catch (error) {
       console.error('Error fetching keranjang:', error);
     }
@@ -51,7 +49,7 @@ function OrderPage() {
   const updateKeranjang = async (updatedKeranjang) => {
     try {
       const response = await axios.put(
-        `http://localhost:9090/users/${userId}/updateKeranjang`,
+        `http://localhost:9090/keranjangs/updateKeranjang/${userId}`,
         updatedKeranjang
       );
       setKeranjang(response.data); // Update keranjang state
@@ -59,6 +57,7 @@ function OrderPage() {
       console.error('Error updating keranjang:', error);
     }
   };
+  
 
   const handleTicketSelection = (jenis_tiket) => {
     const updatedKeranjang = { ...keranjang, jenis_tiket, jumlah_tiket: 1 };
@@ -74,21 +73,12 @@ function OrderPage() {
     } else if (action === 'decrease' && ticketQuantity > 1) {
       newQuantity--;
     }
-
-    let price = 0;
-    if (keranjang?.jenis_tiket === 'Tiket Pelajar') {
-      price = keranjang.museum.tiketPelajar_price;
-    } else if (keranjang?.jenis_tiket === 'Tiket Keluarga') {
-      price = keranjang.museum.tiketKeluarga_price;
-    } else if (keranjang?.jenis_tiket === 'Tiket Reguler') {
-      price = keranjang.museum.tiketReguler_price;
-    }
-    const total = price * newQuantity;
-    const updatedKeranjang = { ...keranjang, jumlah_tiket: newQuantity, total_harga: total };
+    const updatedKeranjang = { ...keranjang, jumlah_tiket: newQuantity};
     setKeranjang(updatedKeranjang); 
     setTicketQuantity(newQuantity);
     updateKeranjang(updatedKeranjang);
   };
+
 
   const displayTicketName = () => {
     if (keranjang?.jenis_tiket === 'Tiket Pelajar') return 'Tiket Pelajar';
@@ -97,11 +87,11 @@ function OrderPage() {
     return 'Ticket Not Selected';
   };
 
-
-
-
-
-
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setGroupName(value); // Update the groupName state
+  };
+  
 
   const [showPopOut, setShowPopOut] = useState(false);
   const [selectedBank, setSelectedBank] = useState("");
@@ -124,25 +114,22 @@ function OrderPage() {
     setSelectedBank("");
   };
 
-  const handlePayment = async () => {
-    console.log("Selected Payment:", selectedPayment);
-    console.log("Selected Bank:", selectedBank);
-    console.log("Keranjang:", keranjang);
-
+  const handlePayment = async () => { 
     const paymentData = {
       metode_pembayaran: selectedPayment,
       bank: selectedPayment === "Transfer Bank" || selectedPayment === "Virtual Account" ? selectedBank : null,
       status_pembayaran: true,
-      tanggal_pembayaran: new Date(), // Set the current date and time in ISO format
+      tanggal_pembayaran: new Date(),
       jenis_tiket: keranjang?.jenis_tiket,
       jumlah_tiket: keranjang?.jumlah_tiket,
       total_harga: keranjang?.total_harga,
-      keranjang_id: keranjang?.keranjang_id,
-      //keranjang: keranjang
+      keranjang: keranjang
     };
   
+    console.log(paymentData);
+  
     try {
-      const response = await fetch("http://localhost:9090/payments/create", {
+      const response = await fetch("http://localhost:9090/payments/createPayment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -153,7 +140,11 @@ function OrderPage() {
       if (response.ok) {
         const result = await response.json();
         alert("Payment successful!");
-        handleClose(); // Close the popup after payment
+  
+        // After payment is successful, create the ticket
+        await createTicketAfterPayment(result);
+  
+        handleClose(); 
       } else {
         const error = await response.text();
         alert(`Payment failed: ${error}`);
@@ -162,8 +153,46 @@ function OrderPage() {
       alert(`Payment error: ${error.message}`);
     }
   };
-  
 
+  const createTicketAfterPayment = async (payment) => {
+    let call = "";
+    if (keranjang?.jenis_tiket === 'Tiket Pelajar') call = "tiketpelajars";
+    if (keranjang?.jenis_tiket === 'Tiket Keluarga') call = "tiketkeluargas";
+    if (keranjang?.jenis_tiket === 'Tiket Reguler') call = "tiketregulers";
+  
+    const ticketData = {
+      keranjang: keranjang,
+      payment: payment,
+      kode_tiket: "some_ticket_code", 
+    };
+  
+    // Determine URL based on the call type
+    let url = `http://localhost:9090/${call}/createTicket`;
+    if (call !== "tiketregulers") {
+      url += `/${groupName}/${keranjang?.jumlah_tiket}`;
+    }
+  
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(ticketData),
+      });
+  
+      if (response.ok) {
+        const result = await response.json();
+      } else {
+        const error = await response.text();
+        alert(`Ticket creation failed: ${error}`);
+      }
+    } catch (error) {
+      alert(`Ticket creation error: ${error.message}`);
+    }
+  };
+  
+  
 
   return (
     <div className="orderpage-body">
@@ -241,14 +270,24 @@ function OrderPage() {
               </span>
             </div>
 
+            <div className="input-field">
+              <label htmlFor={keranjang?.jenis_tiket === 'Tiket Pelajar' ? 'nama_sekolah' : 'nama_keluarga'}>
+                {keranjang?.jenis_tiket === 'Tiket Pelajar' ? 'Nama Sekolah' : 'Nama Keluarga'}
+              </label>
+              <input
+                type="text"
+                id={keranjang?.jenis_tiket === 'Tiket Pelajar' ? 'nama_sekolah' : 'nama_keluarga'}
+                name={keranjang?.jenis_tiket === 'Tiket Pelajar' ? 'nama_sekolah' : 'nama_keluarga'}
+                value={groupName} // Use the state value
+                onChange={handleInputChange}
+              />
+            </div>
+
             <div className="cost-quantity">
               <button className="quantity-btn" onClick={() => handleQuantityChange('decrease')}>-</button>
               <span className="quantity-display">{keranjang?.jumlah_tiket}</span>
               <button className="quantity-btn" onClick={() => handleQuantityChange('increase')}>+</button>
             </div>
-
-
-
 
             <div className="cost-total">
               <span>Total</span>
@@ -276,20 +315,6 @@ function OrderPage() {
                         checked={selectedPayment === "Transfer Bank"}
                         onChange={() => handlePaymentChange("Transfer Bank")}
                       />
-                      {/* <select
-                        value={selectedBank}
-                        onChange={(e) => setSelectedBank(e.target.value)}
-                        disabled={
-                          selectedPayment !== "Transfer Bank" && selectedPayment !== "Virtual Account"
-                        }
-                      >
-                        <option value="">Select a Bank</option>
-                        {bankOptions.map((bank, index) => (
-                          <option key={index} value={bank}>
-                            {bank}
-                          </option>
-                        ))}
-                      </select> */}
                     </div>
 
                     <div className="payment-option">
