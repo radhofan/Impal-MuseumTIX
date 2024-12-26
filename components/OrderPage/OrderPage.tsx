@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // For making API calls
 import '../../css/OrderPage.css';
+// import '@/css/DetailTiketMuseum.css';
 import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
+import Image from 'next/image';
+import museumGeologiImage from '../../image/museumGeologi.jpg';
 
 function OrderPage() {
   const [userId, setUserId] = useState<number | null>(null);
@@ -197,57 +200,125 @@ function OrderPage() {
   return (
     <div className="orderpage-body">
       <Navbar />
+      <div className="detailmuseum-section1">
+        {/* Museum Information Section */}
+        <div className="museum-info">
+          <div className="img">
+            <Image
+              src={museumGeologiImage} // Ensure the image path matches your project structure
+              width={500}
+              height={500}
+              alt="Museum Geologi"
+              className="museum-image"
+            />
+          </div>
+          <div className="museum-details">
+            <h1 className="museum-title">Museum Geologi</h1>
+            <p className="museum-description">
+              Museum Geologi didirikan pada tanggal 16 Mei 1929. Museum ini direnovasi dengan
+              mendapat dana bantuan dari JICA, setelah renovasi selesai, Museum Geologi dibuka
+              kembali dan diresmikan oleh Wakil Presiden RI, Megawati Soekarnoputri pada 23
+              Agustus 2000.
+            </p>
+            <ul className="museum-info-list">
+              <li>📍 Jl. Diponegoro No.57, Kota Bandung Jawa Barat</li>
+              <li>⏰ 9:00 am - 3:00 pm</li>
+              <li>⭐ 4.5</li>
+              <li>❤️ 1543 likes</li>
+            </ul>
+            <div className="button-group">
+              <button className="btn">Directions</button>
+              <button className="btn">Call</button>
+              <button className="btn primary">Buy Tickets</button>
+            </div>
+          </div>
+        </div>
+
+          {/* Summary Section */}
+          <div className="ticket-summary">
+            <h4>Summary:</h4>
+            <p>
+              Location: Museum Geologi | Date: Thu, 21 Nov 2024 | Reguler: 10000 | Anak: 100000
+            </p>
+            <button className="btn primary checkout-btn">Check Out</button>
+          </div>
+      </div>
+
+
       <div className="orderpage-content">
         <h1 className="orderpage-title">Your Order</h1>
         <p className="orderpage-subtitle">Make sure your goods are paid for in full</p>
-
-        <div className="image-container">
-          <img
-            src="https://via.placeholder.com/600x300.png?text=Temporary+Image"
-            alt="Temporary Image"
-            className="big-image"
-          />
-        </div>
-
+        
         <div className="orderpage-section">
+
           <div className="ticket-selection">
             <h3>Select Your Ticket</h3>
 
-            <div className="ticket-item">
-              <input
-                type="radio"
-                id="ticketPelajar"
-                name="ticket"
-                value="Tiket Pelajar"
-                checked={keranjang?.jenis_tiket === 'Tiket Pelajar'}
-                onChange={() => handleTicketSelection('Tiket Pelajar')}
+            <div className="museumTiket">
+              <Image
+                src={museumGeologiImage} // Ensure the image path matches your project structure
+                width={100}
+                height={100}
+                alt="Museum Geologi"
+                className="museum-image"
               />
-              <label htmlFor="ticketAnak">Tiket Pelajar - {keranjang?.museum.tiketPelajar_price}</label>
+              <div className="ticket-item">
+                <input
+                  type="radio"
+                  id="ticketPelajar"
+                  name="ticket"
+                  value="Tiket Pelajar"
+                  checked={keranjang?.jenis_tiket === 'Tiket Pelajar'}
+                  onChange={() => handleTicketSelection('Tiket Pelajar')}
+                />
+                <label htmlFor="ticketAnak">Tiket Pelajar - {keranjang?.museum.tiket_pelajar_price}</label>
+              </div>
             </div>
 
-            <div className="ticket-item">
-              <input
-                type="radio"
-                id="ticketKeluarga"
-                name="ticket"
-                value="Tiket Keluarga"
-                checked={keranjang?.jenis_tiket === 'Tiket Keluarga'}
-                onChange={() => handleTicketSelection('Tiket Keluarga')}
+            <div className="museumTiket">
+              <Image
+                src={museumGeologiImage} // Ensure the image path matches your project structure
+                width={100}
+                height={100}
+                alt="Museum Geologi"
+                className="museum-image"
               />
-              <label htmlFor="ticketKeluarga">Tiket Keluarga - {keranjang?.museum.tiketKeluarga_price}</label>
+              <div className="ticket-item">
+                <input
+                  type="radio"
+                  id="ticketKeluarga"
+                  name="ticket"
+                  value="Tiket Keluarga"
+                  checked={keranjang?.jenis_tiket === 'Tiket Keluarga'}
+                  onChange={() => handleTicketSelection('Tiket Keluarga')}
+                />
+                <label htmlFor="ticketKeluarga">Tiket Keluarga - {keranjang?.museum.tiket_keluarga_price}</label>
+              </div>
             </div>
 
-            <div className="ticket-item">
-              <input
-                type="radio"
-                id="ticketReguler"
-                name="ticket"
-                value="Tiket Reguler"
-                checked={keranjang?.jenis_tiket === 'Tiket Reguler'}
-                onChange={() => handleTicketSelection('Tiket Reguler')}
+            <div className="museumTiket">
+              <Image
+                src={museumGeologiImage} // Ensure the image path matches your project structure
+                width={100}
+                height={100}
+                alt="Museum Geologi"
+                className="museum-image"
               />
-              <label htmlFor="ticketReguler">Tiket Reguler - {keranjang?.museum.tiketReguler_price}</label>
+              <div className="ticket-item">
+                <input
+                  type="radio"
+                  id="ticketReguler"
+                  name="ticket"
+                  value="Tiket Reguler"
+                  checked={keranjang?.jenis_tiket === 'Tiket Reguler'}
+                  onChange={() => handleTicketSelection('Tiket Reguler')}
+                />
+                <label htmlFor="ticketReguler">Tiket Reguler - {keranjang?.museum.tiket_reguler_price}</label>
+              </div>
             </div>
+
+            
+      
 
 
           </div>
@@ -261,11 +332,11 @@ function OrderPage() {
               </div>
               <span className="idr">
                 {keranjang?.jenis_tiket === 'Tiket Pelajar'
-                  ? `IDR ${keranjang?.museum.tiketPelajar_price}`
+                  ? `IDR ${keranjang?.museum.tiket_pelajar_price}`
                   : keranjang?.jenis_tiket === 'Tiket Keluarga'
-                  ? `IDR ${keranjang?.museum.tiketKeluarga_price}`
+                  ? `IDR ${keranjang?.museum.tiket_keluarga_price}`
                   : keranjang?.jenis_tiket === 'Tiket Reguler'
-                  ? `IDR ${keranjang?.museum.tiketReguler_price}`
+                  ? `IDR ${keranjang?.museum.tiket_reguler_price}`
                   : 'IDR 0'}
               </span>
             </div>

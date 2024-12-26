@@ -1,6 +1,6 @@
 import React from 'react';
 
-import '@/app/globals.css'; // Your global styles
+import '@/app/globals.css'; 
 import OrderPage from '@/components/OrderPage/OrderPage';
 
 const OrderPageWrapper = () => {

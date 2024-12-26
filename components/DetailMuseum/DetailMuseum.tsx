@@ -2,16 +2,14 @@
 import React, { useEffect, useState } from 'react';
 
 import '@/app/globals.css'; 
-import '@/css/DetailTiketMuseum.css';
+import '@/css/DetailMuseum.css';
 
 import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-function DetailMuseum() {
-  const router = useRouter();
-  const { id } = router.query;
+function DetailMuseum({museum_id}) {
   const [regularTickets, setRegularTickets] = useState(1);
   const [familyTickets, setFamilyTickets] = useState(0);
   const [childTickets, setChildTickets] = useState(4);
@@ -19,10 +17,10 @@ function DetailMuseum() {
   const [museum, setMuseum] = useState([]);
 
   useEffect(() => {
-    if (id) {
-      setMuseumId(id);  
+    if (museum_id) {
+      setMuseumId(museum_id);  
     }
-  }, [id]);
+  }, []);
 
   useEffect(() => {
     if (museumId) {

@@ -3,24 +3,27 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "dev:nodemon": "nodemon"
   },
   "dependencies": {
+    "add": "^2.0.6",
     "axios": "^1.7.9",
     "cors": "^2.8.5",
     "mysql2": "^3.11.3",
     "next": "14.2.14",
+    "or": "^0.2.0",
     "react": "^18",
     "react-dom": "^18",
-    "swiper": "^11.1.15"
+    "swiper": "^11.1.15",
+    "yarn": "^1.22.22"
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/react": "^18",
+    "@types/react": "^18.3.18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.14",
