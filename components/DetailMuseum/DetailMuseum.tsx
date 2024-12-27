@@ -1,24 +1,70 @@
 // Updated DetailMuseum.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import '@/app/globals.css'; 
-import '@/css/DetailTiketMuseum.css';
+import '@/css/DetailMuseum.css';
 
 import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
-function DetailMuseum() {
+function DetailMuseum({museum_id}) {
   const [regularTickets, setRegularTickets] = useState(1);
   const [familyTickets, setFamilyTickets] = useState(0);
   const [childTickets, setChildTickets] = useState(4);
+  const [museumId, setMuseumId] = useState(null);
+  const [museum, setMuseum] = useState([]);
+
+  useEffect(() => {
+    if (museum_id) {
+      setMuseumId(museum_id);  
+    }
+  }, []);
+
+  useEffect(() => {
+    if (museumId) {
+      async function getMuseums() {
+        const data = await fetchMuseums();
+        setMuseum(data);
+      }
+  
+      getMuseums(); 
+    }
+  }, [museumId]);
+
+  async function fetchMuseums() {
+    try {
+      // Send a POST request with museumId in the body
+      const response = await fetch("http://localhost:9090/museums/getSpec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: museumId }), // Pass the museumId in the request body
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const museum = await response.json();  
+      console.log(museum);
+      return museum;
+    } catch (error) {
+      console.error("Error fetching museum details:", error);
+    }
+  }
+
 
   return (
+    
     <div className="detailmuseum-body">
       <Navbar />
       <div className="detailmuseum-section1">
         {/* Museum Information Section */}
         <div className="museum-info">
+          <h1>Museum Details for ID: {museumId}</h1>
           <div className="img">
             <Image
               src="/images/museum-geologi.jpg" // Ensure the image path matches your project structure

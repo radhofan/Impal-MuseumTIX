@@ -1,15 +1,541 @@
-.orderpage-body{
-    height: 100vh;
+/* General Page Styling */
+  .orderpage-body {
+    font-family: Arial, sans-serif;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .orderpage-content {
+    width: 80%;
+    margin: 2rem auto;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .orderpage-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  .orderpage-subtitle {
+    text-align: center;
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 2rem;
+  }
+  
+  /* Section Styling */
+  .orderpage-section {
+    display: flex;
+    justify-content: column;
+  }
+  
+  /* Ticket Section Styling */
+  .ticket-section {
+    width: 60%;
+  }
+  
+  .ticket-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border: 1px solid #ddd;
+    padding: 0.8rem;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    color: black;
+    justify-content: center;
+  }
+  
+  .ticket-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+    margin-right: 1.5rem;
+  }
+  
+  .ticket-details h4 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+  
+  .image {
+    background-image: url("https://images.unsplash.com/photo-1518998053901-5348d3961a04?q=80&w=2274&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+    background-size: cover;
+    background-position: center;
+    height: 100px;
+    width: 100px;
+    margin: 10px;
+ }
+ 
+
+  .ticket-details p {
+    margin: 0.3rem 0 0 0;
+    color: #777;
+    font-size: 0.95rem;
+  }
+  
+  .ticket-actions {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+  
+  .ticket-actions button {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 0.5rem 0.8rem;
+    margin: 0 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .ticket-actions button:hover {
+    background-color: #e74c3c;
+    color: #fff;
+  }
+
+  
+  .ticket-actions span {
+    font-size: 1.1rem;
+  }
+
+  /* Cost Section Styling */
+  .cost-section {
+    width: 35%;
+    border: 1px solid #ddd;
+    padding: 1.5rem;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+  
+  .cost-section h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    color: #333333;
+  }
+
+  .idr {
+    color: green;
+  }
+
+  .idrtotal {
+    color: #000080;
+  }
+
+  .tiketitem{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cost-item,
+  .cost-total {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+  }
+  
+  .cost-item:last-child {
+    margin-bottom: 2rem;
+  }
+  
+  .cost-total {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .cost-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  
+  .cancel-btn {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 0.7rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    color: white;
+    background-color: #e74c3c;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #ddd;
+  }
+  
+  .checkout-btn {
+    color: black;
+    border: 1px solid black;
+    padding: 0.7rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+  }
+  
+  .checkout-btn:hover {
+    background-color: #c0392b;
+  }
+
+  .cost-item .tiketitem span {
+    color: black; /* Set the text color to black */
+  }
+
+  .cost-total span {
+    color: black; /* Set the text color to black */
+  }
+  
+
+  .image-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .big-image {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+  }
+
+  .cost-quantity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .quantity-btn {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    color: black;
+  }
+  
+  .quantity-display {
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+  }
+  
+  .quantity-btn:hover {
+    background-color: #ddd;
+  }
+
+  .cost-buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+  .pop-out-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .pop-out-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .payment-option {
+    margin: 20px 0;
+  }
+
+  .close-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #f00;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .close-btn:hover {
+    background-color: #c00;
+  }
+
+  select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: black;
+  }
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    margin-bottom: 10px;
+  }
+
+.museumTiket{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 30px;
 }
 
-.orderpage-section1{
-    width: 100%;
-    height: 80%;
-    background-color: red;
+.ticket-selection{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
-.orderpagem-section2{
-    width: 100%;
-    height: 80%;
-    background-color: blue;
+/* Updated DetailTiketMuseum.css */
+.detailmuseum-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+.detailmuseum-section1 {
+  flex: 1;
+  padding: 20px;
+}
+
+.museum-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.img {
+  flex: 1;
+  text-align: center;
+}
+
+.museum-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.museum-details {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.museum-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.museum-description {
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.museum-info-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  line-height: 1.8;
+}
+
+.button-group {
+  margin-top: 20px;
+}
+
+.btn {
+  margin-right: 10px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+  background-color: #888;
+  transition: background-color 0.3s ease;
+}
+
+.btn.primary {
+  background-color: #e63946;
+}
+
+.btn:hover {
+  background-color: #555;
+}
+
+.btn.primary:hover {
+  background-color: #d62736;
+}
+
+.reviews {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.reviews-title {
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+.review-card {
+  background-color: #f9f9f9;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.review-card-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.review-comment {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .museum-info {
+      flex-direction: column;
+  }
+}
+
+/* Ticket Schedule Section */
+.ticket-schedule-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 30px auto;
+  max-width: 800px;
+  font-family: Arial, sans-serif;
+}
+
+.ticket-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+.schedule-notice {
+  font-size: 12px;
+  color: red;
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.ticket-options {
+  margin-bottom: 20px;
+}
+
+.ticket-type {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.ticket-header {
+  font-weight: bold;
+  color: #333;
+}
+
+.ticket-input {
+  font-size: 14px;
+  color: #555;
+}
+
+.ticket-input input {
+  width: 50px;
+  margin-left: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.ticket-summary {
+  margin-top: 20px;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ticket-summary h4 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.ticket-summary p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.checkout-btn {
+  display: block;
+  margin-top: 15px;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  background-color: #e63946;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.checkout-btn:hover {
+  background-color: #d62736;
 }

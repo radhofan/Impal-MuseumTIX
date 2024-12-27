@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Swiper from 'swiper';
+import Link from 'next/link';
 
 import '../../css/HomePage.css';
 import '../../css/Navbar.css';
@@ -13,49 +14,103 @@ import Footer from '@/components/Global/Footer';
 
 const HomePage = () => {
 
+
+  const [museums, setMuseums] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showAll, setShowAll] = useState(false);
+
+  // Filter museums 
+  const filteredMuseums = museums.filter((museum) =>
+    museum.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    museum.lokasi.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const museumsToDisplay = showAll ? filteredMuseums : filteredMuseums.slice(0, 6);
+
+  // useEffect List Musum
+  useEffect(() => {
+      async function getMuseums() {
+          const data = await fetchMuseums();
+          setMuseums(data);
+          setLoading(false); 
+      }
+
+      getMuseums(); 
+  }, []);
+
+  //Function Cari Museum
+  async function fetchMuseums() {
+    try {
+        const response = await fetch("http://localhost:9090/museums/getAll", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const museums = await response.json();
+        console.log(museums);
+        return museums;
+    } catch (error) {
+        console.error("Error fetching museums:", error);
+    }
+  }
+  
+  // useEffect Swiper
   useEffect(() => {
     const swiper = new Swiper('.swiper-container', {
-      direction: 'vertical', 
+      direction: 'vertical',
       loop: true,
       pagination: {
         el: '.swiper-pagination',
         clickable: true,
-        type: 'bullets', 
-        bulletClass: 'circle', 
-        bulletActiveClass: 'swiper-pagination-bullet-active', 
+        type: 'bullets',
+        bulletClass: 'circle',
+        bulletActiveClass: 'swiper-pagination-bullet-active',
       },
       autoplay: {
-        delay: 5000, 
+        delay: 5000,
       },
-      effect: 'fade', 
+      effect: 'fade',
       fadeEffect: {
         crossFade: true,
       },
     });
-  
+
     const updateProgressCircles = () => {
       const circles = document.querySelectorAll('.swiper-progress .circle');
-      circles.forEach(circle => {
+      if (circles.length === 0) return; // Safeguard: Ensure circles exist
+
+      circles.forEach((circle) => {
         circle.classList.remove('active');
       });
+
       const activeIndex = swiper.realIndex;
-      circles[activeIndex].classList.add('active');
+      if (circles[activeIndex]) {
+        circles[activeIndex].classList.add('active');
+      }
     };
-  
+
     const progressCircles = document.querySelectorAll('.swiper-progress .circle');
     progressCircles.forEach((circle, index) => {
       circle.addEventListener('click', () => {
         swiper.slideTo(index);
       });
     });
-  
+
     swiper.on('slideChange', updateProgressCircles);
-  
-    updateProgressCircles();
-  
+
+    updateProgressCircles(); // Initial update
+
+    // Cleanup on unmount
     return () => {
-      progressCircles.forEach(circle => {
-        circle.removeEventListener('click', () => {});
+      progressCircles.forEach((circle, index) => {
+        circle.removeEventListener('click', () => {
+          swiper.slideTo(index);
+        });
       });
       if (swiper) swiper.destroy(true, true);
     };
@@ -64,7 +119,6 @@ const HomePage = () => {
   return (
     <div className='homepage-body'>
         <Navbar/>
-
         <div className='homepage-section1'>
             <div className="swiper-container">
               <div className="swiper-wrapper">
@@ -104,93 +158,66 @@ const HomePage = () => {
             </div>
         </div>
 
-        <div className='homepage-section2'>
-          <div className='homepage-section2-top'>
-            <div className='homepage-section2-top-left'>
-               <div className='homepage-section2-top-left-title'>Museum List</div>
-               <div className='homepage-section2-top-left-desc'>Find your favourite museum</div>
-            </div>
-            <div className='homepage-section2-top-right'>
-              <div className='homepage-section2-top-right-bar'>
-                <input type='text' placeholder='Search...' className='search-input' />
-              </div>
-              <div className='homepage-section2-top-right-button'>Search</div>
-            </div>
+      <div className='homepage-section2'>
+
+
+        {/* Search Bar and Input */}
+        <div className='homepage-section2-top'>
+          <div className='homepage-section2-top-left'>
+            <div className='homepage-section2-top-left-title'>Museum List</div>
+            <div className='homepage-section2-top-left-desc'>Find your favourite museum</div>
           </div>
-          <div className='homepage-section2-list'>
-            <div className='card'>
-              <div className='card-image'></div>
-              <div className='card-info'>
-                <span className='card-title'>Museum Geologi</span>
-                <span className='card-address'>Jl. Diponegoro No.57</span>
-                <div className='card-rating'>
-                  <span className='star'>⭐</span>
-                  <span className='rating'>4.5</span>
-                </div>
-              </div>
+          <div className='homepage-section2-top-right'>
+            <div className='homepage-section2-top-right-bar'>
+              <input
+                type='text'
+                placeholder='Search...'
+                className='search-input'
+                value={searchTerm} // Controlled input
+                onChange={(e) => setSearchTerm(e.target.value)} // Update state on change
+              />
             </div>
-            
-            <div className='card'>
-              <div className='card-image'></div>
-              <div className='card-info'>
-                <span className='card-title'>Museum Geologi</span>
-                <span className='card-address'>Jl. Diponegoro No.57</span>
-                <div className='card-rating'>
-                  <span className='star'>⭐</span>
-                  <span className='rating'>4.5</span>
-                </div>
-              </div>
-            </div>
-
-            <div className='card'>
-              <div className='card-image'></div>
-              <div className='card-info'>
-                <span className='card-title'>Museum Geologi</span>
-                <span className='card-address'>Jl. Diponegoro No.57</span>
-                <div className='card-rating'>
-                  <span className='star'>⭐</span>
-                  <span className='rating'>4.5</span>
-                </div>
-              </div>
-            </div>
-
-            <div className='card'>
-              <div className='card-image'></div>
-              <div className='card-info'>
-                <span className='card-title'>Museum Geologi</span>
-                <span className='card-address'>Jl. Diponegoro No.57</span>
-                <div className='card-rating'>
-                  <span className='star'>⭐</span>
-                  <span className='rating'>4.5</span>
-                </div>
-              </div>
-            </div>
-
-            <div className='card'>
-              <div className='card-image'></div>
-              <div className='card-info'>
-                <span className='card-title'>Museum Geologi</span>
-                <span className='card-address'>Jl. Diponegoro No.57</span>
-                <div className='card-rating'>
-                  <span className='star'>⭐</span>
-                  <span className='rating'>4.5</span>
-                </div>
-              </div>
-            </div>
-
-            <div className='card'>
-              <div className='card-image'></div>
-              <div className='card-info'>
-                <span className='card-title'>Museum Geologi</span>
-                <span className='card-address'>Jl. Diponegoro No.57</span>
-                <div className='card-rating'>
-                  <span className='star'>⭐</span>
-                  <span className='rating'>4.5</span>
-                </div>
-              </div>
-            </div>
+            <div className='homepage-section2-top-right-button'>Search</div>
           </div>
         </div>
+
+        {/* Museums List */}
+        <div className='homepage-section2-list'>
+          {museumsToDisplay.length > 0 ? (
+            museumsToDisplay.map((museum, index) => (
+              <Link key={index} href={`/DetailMuseum/${museum.museum_id}`} passHref>
+                <div className='card'>
+                  <div className='card-image'></div>
+                  <div className='card-info'>
+                    <span className='card-title'>{museum.nama}</span>
+                    <span className='card-address'>{museum.lokasi}</span>
+                    <span className='notelp'>{museum.no_telpon}</span>
+                    <div className='card-rating'>
+                      <span className='star'>⭐</span>
+                      <span className='rating'>{museum.rating}</span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <div>No museums found</div>
+          )}
+        </div>
+        {/* Button container */}
+        {filteredMuseums.length > 6 && (
+          <div className='button-container'>
+            <button
+              className='show-more-button'
+              onClick={() => setShowAll(!showAll)}
+            >
+              {showAll ? 'Show Less' : 'Show More'}
+            </button>
+          </div>
+        )}
+        
+      </div>
+
         <Footer/>
     </div>
   )

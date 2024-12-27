@@ -1,0 +1,139 @@
+.regist-body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .regist-section1 {
+    width: 100%;
+    height: calc(100vh - 120px); /* Menyesuaikan tinggi */
+    background-image: url('../image/a.jpg'); /* Ubah path gambar */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    position: relative;
+  }
+
+  .login-overlay {
+    position: absolute;
+    bottom: 5%;
+    left: 5%;
+    color: white;
+    font-size: 2rem;
+    font-family: Post No Bills Jaffna SemiBold;
+    font-style: oblique;
+  }
+
+  /* Form Card */
+  .form-card {
+    flex: 1;
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 90%; /* Responsif */
+    text-align: center;
+    align-items: end;
+    justify-content: right;
+    margin: 20px;
+  }
+
+  /* Header pada Form */
+  .form-header {
+    margin-bottom: 20px;
+  }
+
+  .form-title {
+    font-size: 20px;
+    font-weight: bold;
+    font-family: poppins, sans-serif;
+  }
+
+  .highlight {
+    color: red;
+  }
+
+  .form-subtitle {
+    font-size: 24px;
+    margin: 10px 0;
+    color: #333;
+    font-family: Prata, serif;
+  }
+
+  .form-description {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+  }
+
+  /* Struktur Form */
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+  }
+
+  .form-input {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    width: calc(50% - 10px); /* Setengah lebar untuk input nama */
+    color: black;
+  }
+
+  .form-group:nth-child(2) .form-input {
+    width: 100%;
+  }
+
+  /* Tombol Form */
+  .form-button {
+    background-color: red;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .form-button:hover {
+    background-color: darkred;
+  }
+
+  /* Informasi Password */
+  .password-hint {
+    font-size: 12px;
+    color: #888;
+    text-align: left;
+  }
+
+  /* Link Login */
+  .login-link {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .login-link a {
+    color: red;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .login-link a:hover {
+    text-decoration: underline;
+  }
