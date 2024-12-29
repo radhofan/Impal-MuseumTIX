@@ -7,16 +7,16 @@ import Footer from '@/components/Global/Footer';
 import Image from 'next/image';
 import museumGeologiImage from '../../image/museumGeologi.jpg';
 
-function OrderPage() {
+function OrderPage({museum_id}) {
   const [userId, setUserId] = useState<number | null>(null);
   const [keranjang, setKeranjang] = useState(null);
   const [ticketQuantity, setTicketQuantity] = useState(1);
   const [totalHarga, setTotalHarga] = useState<number | null>(null);
   const [groupName, setGroupName] = useState(''); // Manage the group name based on ticket type
+  const [museum, setMuseum] = useState(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
-    
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       const parsedUserId = parseInt(parsedUser.user_id, 10); 
@@ -42,8 +42,22 @@ function OrderPage() {
   const fetchKeranjang = async (id: number) => {
     try {
       const response = await axios.get(`http://localhost:9090/keranjangs/getKeranjang/${id}`);
-      setKeranjang(response.data);
-      setTicketQuantity(response.data.jumlahTiket || 1);
+      const fetchedKeranjang = response.data;
+  
+      // Log the fetched keranjang to check the initial state
+      console.log("Fetched keranjang before update:", fetchedKeranjang);
+
+      // Fetch museum details using the museum_id
+      const fetchedMuseum = await fetchMuseums(museum_id);
+
+      // Update the keranjang object with the fetched museum details
+      const updatedKeranjang = { ...fetchedKeranjang, museum: fetchedMuseum };
+
+      // Log the updated keranjang to ensure museum is updated
+      console.log("Updated keranjang with new museum:", updatedKeranjang);
+
+      // Call the updateKeranjang function to update the state
+      setKeranjang(updatedKeranjang);
     } catch (error) {
       console.error('Error fetching keranjang:', error);
     }
@@ -58,6 +72,28 @@ function OrderPage() {
       setKeranjang(response.data); // Update keranjang state
     } catch (error) {
       console.error('Error updating keranjang:', error);
+    }
+  };
+
+  const fetchMuseums = async (museumId) => {
+    try {
+      const response = await fetch("http://localhost:9090/museums/getSpec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: museumId }), // Pass the museumId in the request body
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const museum = await response.json();
+      console.log("Fetched museum:", museum);
+      return museum;
+    } catch (error) {
+      console.error("Error fetching museum details:", error);
     }
   };
   
@@ -175,21 +211,33 @@ function OrderPage() {
       url += `/${groupName}/${keranjang?.jumlah_tiket}`;
     }
   
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(ticketData),
-      });
+    // Loop through the quantity of tickets (keranjang?.jumlah_tiket)
+    const ticketCount = keranjang?.jumlah_tiket || 1;  // Default to 1 if undefined or null
   
-      if (response.ok) {
-        const result = await response.json();
-      } else {
-        const error = await response.text();
-        alert(`Ticket creation failed: ${error}`);
+    try {
+      for (let i = 0; i < ticketCount; i++) {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(ticketData),
+        });
+  
+        if (response.ok) {
+          const result = await response.json();
+          console.log(`Ticket ${i + 1} created:`, result);
+        } else {
+          const error = await response.text();
+          alert(`Ticket creation failed: ${error}`);
+          break;  // Stop the loop if one ticket creation fails
+        }
       }
+  
+      // Optionally handle a success message or post-creation logic after all tickets are created
+      alert(`${ticketCount} tickets created successfully!`);
+      const updatedKeranjang = { ...keranjang, jumlah_tiket: 0, total_harga: 0, jenis_tiket: "Tiket Reguler" };
+      updateKeranjang(updatedKeranjang);
     } catch (error) {
       alert(`Ticket creation error: ${error.message}`);
     }

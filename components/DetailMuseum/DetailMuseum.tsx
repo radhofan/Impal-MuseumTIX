@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import '@/app/globals.css'; 
 import '@/css/DetailMuseum.css';
+import Link from 'next/link';
 
 import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
@@ -91,7 +92,11 @@ function DetailMuseum({museum_id}) {
             <div className="button-group">
               <button className="btn">Directions</button>
               <button className="btn">Call</button>
-              <button className="btn primary">Buy Tickets</button>
+              <Link href={`/OrderPage/${museum_id}`} passHref>
+                <button className="btn primary">
+                  Buy Tickets
+                </button>
+              </Link>
             </div>
           </div>
         </div>
