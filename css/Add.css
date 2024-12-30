@@ -8,19 +8,23 @@ body {
 
 .add-page {
   height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   backdrop-filter: blur(5px); /* Blur efek untuk fokus di form */
+  min-height: fit-content;
 }
 
 .add-container {
   background-color: rgba(255, 255, 255, 0.85); /* Warna putih dengan transparansi */
   padding: 40px;
   border-radius: 20px; /* Membuat form lebih bulat */
-  width: 80%; /* Lebar form */
-  max-width: 600px; /* Maksimal lebar form */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Bayangan lembut */
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-left: 20%;
+  margin-right: 20%;
+  margin-top: 10%;
+  margin-bottom: 10%;
 }
 
 .header {
@@ -43,6 +47,7 @@ body {
 
 .form-group {
   margin-bottom: 20px;
+  margin: 10px;
 }
 
 .form-group input,

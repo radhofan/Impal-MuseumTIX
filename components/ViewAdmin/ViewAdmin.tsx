@@ -5,6 +5,7 @@ import '../../css/ViewAdmin.css';
 import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
 import Image from 'next/image';
+import { configUrl } from '@/config.js';
 
 const ViewAdmin = () => {
   const [museums, setMuseums] = useState([]);
@@ -25,7 +26,7 @@ const ViewAdmin = () => {
   // Fetch museums function
   async function fetchMuseums() {
     try {
-      const response = await fetch('http://localhost:9090/museums/getAll', {
+      const response = await fetch(`${configUrl}/museums/getAll`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -65,7 +66,9 @@ const ViewAdmin = () => {
           className="search-input"
         />
         <button className="search-button">Search</button>
-        <button className="add-button">Add Museum</button>
+        <Link href="/Add" passHref>
+          <button className="add-button" >Add Museum</button>
+        </Link>
       </div>
 
       <div className="museum-list">

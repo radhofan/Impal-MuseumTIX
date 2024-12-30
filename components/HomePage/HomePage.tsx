@@ -13,6 +13,8 @@ import Image from 'next/image';
 import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
 
+import { configUrl } from '@/config.js';
+
 const HomePage = () => {
 
 
@@ -42,7 +44,7 @@ const HomePage = () => {
 
   async function fetchMuseums() {
     try {
-        const response = await fetch("http://localhost:9090/museums/getAll", {
+        const response = await fetch(`${configUrl}/museums/getAll`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

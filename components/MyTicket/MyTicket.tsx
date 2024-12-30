@@ -6,6 +6,7 @@ import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
 import axios from 'axios';
 import Image from 'next/image';
+import { configUrl } from '@/config.js';
 
 const TicketCard = ({ ticket }: { ticket: any}) => {
 
@@ -20,7 +21,7 @@ const TicketCard = ({ ticket }: { ticket: any}) => {
         jenis = "tiketregulers"
       }
       const response = await axios.post(
-        `http://localhost:9090/${jenis}/status/cancel/${ticket.tiket_id}`
+        `${configUrl}/${jenis}/status/cancel/${ticket.tiket_id}`
       );
       console.log('Cancel response:', response.data);
   
@@ -111,7 +112,7 @@ function MyTicket() {
 
   const fetchKeranjang = async () => {
     try {
-      const response = await axios.get(`http://localhost:9090/keranjangs/getKeranjang/${userId}`);
+      const response = await axios.get(`${configUrl}/keranjangs/getKeranjang/${userId}`);
       setKeranjang(response.data);
     } catch (error) {
       console.error('Error fetching keranjang:', error);
@@ -130,7 +131,7 @@ function MyTicket() {
   
     try {
       // API call for tiket_pelajars
-      const tiketPelajarResponse = await fetch(`http://localhost:9090/tiketpelajars/status/${keranjang?.keranjang_id}`, {
+      const tiketPelajarResponse = await fetch(`${configUrl}/tiketpelajars/status/${keranjang?.keranjang_id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -142,9 +143,9 @@ function MyTicket() {
       }
       const tiketPelajars = await tiketPelajarResponse.json();
       setTiketPelajars(tiketPelajars);
-    
+
       // API call for tiket_keluargas
-      const tiketKeluargaResponse = await fetch(`http://localhost:9090/tiketkeluargas/status/${keranjang?.keranjang_id}`, {
+      const tiketKeluargaResponse = await fetch(`${configUrl}/tiketkeluargas/status/${keranjang?.keranjang_id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -158,7 +159,7 @@ function MyTicket() {
       setTiketKeluargas(tiketKeluargas);
     
       // API call for tiket_regulers
-      const tiketRegulerResponse = await fetch(`http://localhost:9090/tiketregulers/status/${keranjang?.keranjang_id}`, {
+      const tiketRegulerResponse = await fetch(`${configUrl}/tiketregulers/status/${keranjang?.keranjang_id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -201,7 +202,7 @@ function MyTicket() {
     const fetchPayments = async () => {
       try {
         // Replace with your actual API call for payment history
-        const response = await fetch(`http://localhost:9090/payments/viewUserHistory/${keranjang?.keranjang_id}`);
+        const response = await fetch(`${configUrl}/payments/viewUserHistory/${keranjang?.keranjang_id}`);
         const data = await response.json();
         console.log(data)
         setPayments(data);

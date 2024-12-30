@@ -220,6 +220,7 @@
     align-items: center;
     gap: 10px;
     margin-bottom: 20px;
+    color: black;
   }
   
   .quantity-btn {
@@ -278,6 +279,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin: 10px;
   }
 
   .close-btn:hover {
@@ -396,6 +398,7 @@
 
 .btn.primary {
   background-color: #e63946;
+  margin: 10px;
 }
 
 .btn:hover {
@@ -615,7 +618,7 @@
 
 .quantity-display {
   font-size: 20px;
-  color: white;
+  color: black;
   margin: 0 10px; /* Add space between the buttons and the display */
   display: inline-block;
 }

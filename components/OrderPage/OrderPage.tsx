@@ -8,6 +8,10 @@ import Footer from '@/components/Global/Footer';
 import Image from 'next/image';
 import museumGeologiImage from '../../image/museumGeologi.jpg';
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { configUrl } from '@/config.js';
+
 function OrderPage({museum_id}) {
   const [userId, setUserId] = useState<number | null>(null);
   const [keranjang, setKeranjang] = useState(null);
@@ -16,6 +20,7 @@ function OrderPage({museum_id}) {
   const [groupName, setGroupName] = useState(''); // Manage the group name based on ticket type
   const [museum, setMuseum] = useState(null);
   const router = useRouter();
+  const [selectedDate, setSelectedDate] = useState(null);
 
 
   useEffect(() => {
@@ -45,22 +50,13 @@ function OrderPage({museum_id}) {
   
   const fetchKeranjang = async (id: number) => {
     try {
-      const response = await axios.get(`http://localhost:9090/keranjangs/getKeranjang/${id}`);
+      const response = await axios.get(`${configUrl}/keranjangs/getKeranjang/${id}`);
       const fetchedKeranjang = response.data;
-  
-      // Log the fetched keranjang to check the initial state
-      console.log("Fetched keranjang before update:", fetchedKeranjang);
 
-      // Fetch museum details using the museum_id
       const fetchedMuseum = await fetchMuseums(museum_id);
 
-      // Update the keranjang object with the fetched museum details
-      const updatedKeranjang = { ...fetchedKeranjang, museum: fetchedMuseum };
-
-      // Log the updated keranjang to ensure museum is updated
-      console.log("Updated keranjang with new museum:", updatedKeranjang);
-
-      // Call the updateKeranjang function to update the state
+      const updatedKeranjang = { ...fetchedKeranjang, museum: fetchedMuseum, total_harga: fetchedMuseum?.tiket_reguler_price, jumlah_tiket: 1 };
+      updateKeranjang(updatedKeranjang);
       setKeranjang(updatedKeranjang);
     } catch (error) {
       console.error('Error fetching keranjang:', error);
@@ -70,7 +66,7 @@ function OrderPage({museum_id}) {
   const updateKeranjang = async (updatedKeranjang) => {
     try {
       const response = await axios.put(
-        `http://localhost:9090/keranjangs/updateKeranjang/${userId}`,
+        `${configUrl}/keranjangs/updateKeranjang/${userId}`,
         updatedKeranjang
       );
       setKeranjang(response.data); // Update keranjang state
@@ -81,7 +77,7 @@ function OrderPage({museum_id}) {
 
   const fetchMuseums = async (museumId) => {
     try {
-      const response = await fetch("http://localhost:9090/museums/getSpec", {
+      const response = await fetch(`${configUrl}/museums/getSpec`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -143,9 +139,16 @@ function OrderPage({museum_id}) {
   const bankOptions = ["Bank A", "Bank B", "Bank C"];
 
   const handleCheckout = () => {
-    setShowPopOut(true);
+    if (ticketQuantity > 0 && 
+        (keranjang?.jenis_tiket === "Tiket Keluarga" || keranjang?.jenis_tiket === "Tiket Pelajar") && 
+        groupName !== null && groupName.trim() !== '' && selectedDate !== null) {
+      setShowPopOut(true);
+    }else if(keranjang?.jenis_tiket === "Tiket Reguler" && selectedDate !== null){
+      setShowPopOut(true);
+    }else {
+      alert('Tolong isi data secara lengkap!')
+    }
   };
-
   const handleClose = () => {
     setShowPopOut(false);
     setSelectedBank("");
@@ -164,7 +167,7 @@ function OrderPage({museum_id}) {
       metode_pembayaran: selectedPayment,
       bank: selectedPayment === "Transfer Bank" || selectedPayment === "Virtual Account" ? selectedBank : null,
       status_pembayaran: true,
-      tanggal_pembayaran: new Date(),
+      tanggal_pembayaran: selectedDate,
       jenis_tiket: keranjang?.jenis_tiket,
       jumlah_tiket: keranjang?.jumlah_tiket,
       total_harga: keranjang?.total_harga,
@@ -173,10 +176,9 @@ function OrderPage({museum_id}) {
       museum: museum
     };
   
-    console.log(paymentData);
   
     try {
-      const response = await fetch("http://localhost:9090/payments/createPayment", {
+      const response = await fetch(`${configUrl}/payments/createPayment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -214,7 +216,7 @@ function OrderPage({museum_id}) {
       tanggal_kunjungan: new Date().toISOString().split('T')[0]
     };
   
-    let url = `http://localhost:9090/${call}/createTicket`;
+    let url = `${configUrl}/${call}/createTicket`;
     if (call !== "tiketregulers") {
       url += `/${groupName}/${keranjang?.jumlah_tiket}`;
     }
@@ -233,24 +235,30 @@ function OrderPage({museum_id}) {
   
         if (response.ok) {
           const result = await response.json();
+          const updatedKeranjang = { ...keranjang, jumlah_tiket: 1, total_harga: 0, jenis_tiket: "Tiket Reguler" };
+          updateKeranjang(updatedKeranjang);
           router.push('/MyTicket');
         } else {
           const error = await response.text();
           alert(`Ticket creation failed: ${error}`);
-          break;  // Stop the loop if one ticket creation fails
+          break;  
         }
       }
-  
-      // Optionally handle a success message or post-creation logic after all tickets are created
       alert(`${ticketCount} tickets created successfully!`);
-      const updatedKeranjang = { ...keranjang, jumlah_tiket: 0, total_harga: 0, jenis_tiket: "Tiket Reguler" };
-      updateKeranjang(updatedKeranjang);
     } catch (error) {
       alert(`Ticket creation error: ${error.message}`);
     }
   };
   
-  
+  const mapApi= () => {
+    // Hardcoded location for the example (latitude, longitude)
+    const latitude = -6.900917;
+    const longitude = 107.621361; 
+
+    // Open Google Maps with the specified coordinates
+    const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
+    window.open(url, "_blank"); // Open in a new tab
+  };
 
   return (
     <div className="orderpage-body">
@@ -282,8 +290,8 @@ function OrderPage({museum_id}) {
               <li>❤️ 1543 likes</li>
             </ul>
             <div className="button-group">
-              <button className="btn">Directions</button>
-              <button className="btn">Call</button>
+              <button className="btn"  onClick={mapApi}>Directions</button>
+              <button className="btn" onClick={() => window.open(`tel:${museum?.no_telpon}`, "_self")}>Call</button>
             </div>
           </div>
         </div>
@@ -404,6 +412,7 @@ function OrderPage({museum_id}) {
               </div>
             )}
 
+
             <div className="cost-quantity">
               <button
                 className="quantity-btn decrease"
@@ -411,13 +420,49 @@ function OrderPage({museum_id}) {
               >
                 -
               </button>
-              <span className="quantity-display">{keranjang?.jumlah_tiket}</span>
+                <span className="quantity-display">{keranjang?.jumlah_tiket}</span>
               <button
                 className="quantity-btn increase"
                 onClick={() => handleQuantityChange('increase')}
               >
                 +
               </button>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "left", marginTop: "20px", marginBottom:"10px" }}>
+              <label
+                style={{
+                  marginBottom: "10px",
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  color: "black",
+                }}
+              >
+                Choose your visit date:
+              </label>
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                dateFormat="yyyy/MM/dd"
+                placeholderText="Select a date"
+                minDate={new Date()}
+                className="custom-date-picker" // Add a custom class for styling
+              />
+              <style>
+                {`
+                  .custom-date-picker {
+                    width: 200px;
+                    padding: 10px;
+                    font-size: 16px;
+                    border: 2px solid black;
+                    border-radius: 5px;
+                    color: black;
+                  }
+                  .custom-date-picker::placeholder {
+                    color: gray;
+                  }
+                `}
+              </style>
             </div>
 
             <div className="cost-total">

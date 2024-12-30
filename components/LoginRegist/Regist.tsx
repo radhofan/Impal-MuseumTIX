@@ -5,6 +5,7 @@ import Link from 'next/link';
 import '@/css/Regist.css';
 import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
+import { configUrl } from '@/config.js';
 
 function Regist() {
   const [formData, setFormData] = useState({
@@ -29,15 +30,14 @@ function Regist() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
     try {
-      const response = await axios.post('http://localhost:9090/users/registrasi', formData);
+      const response = await axios.post(`${configUrl}/users/registrasi`, formData);
       if (response.status === 200) {
         console.log("ada")
         setSuccessMessage('Registration successful! You can now log in.');
         setErrorMessage('');
   
-        const loginResponse = await fetch('http://localhost:9090/users/login', {  
+        const loginResponse = await fetch(`${configUrl}/users/login`, {  
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -56,9 +56,12 @@ function Regist() {
         }
       }
     } catch (error) {
-      setErrorMessage(error.response?.data?.message || 'An error occurred. Please try again.');
-      setSuccessMessage('');
-    }
+      if (error.response?.status === 409) { 
+          alert('The email is already in use. Please use a different email.');
+      } else {
+          alert(error.response?.data?.message || 'An error occurred. Please try again.');
+      }
+  }
   };
 
   return (

@@ -9,11 +9,15 @@ import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
 import Image from 'next/image';
 
+import { configUrl } from '@/config.js';
+import { useRouter } from 'next/navigation';
+
 function DetailMuseum({museum_id}) {
 
   const [museumId, setMuseumId] = useState(null);
   const [museum, setMuseum] = useState([]);
-  const [reviews, setReviews] = useState([])
+  const [reviews, setReviews] = useState([]);
+  const router = useRouter();
 
    // Directly fetch data when museum_id is available
   useEffect(() => {
@@ -40,7 +44,7 @@ function DetailMuseum({museum_id}) {
   async function fetchMuseums() {
     try {
       // Send a POST request with museumId in the body
-      const response = await fetch("http://localhost:9090/museums/getSpec", {
+      const response = await fetch(`${configUrl}/museums/getSpec`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,7 +66,7 @@ function DetailMuseum({museum_id}) {
   async function fetchReviews() {
     try {
       // Send a POST request with museumId in the body
-      const response = await fetch(`http://localhost:9090/reviews/getAllMuseumReviews/${museum_id}`, {
+      const response = await fetch(`${configUrl}/reviews/getAllMuseumReviews/${museum_id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -90,32 +94,48 @@ function DetailMuseum({museum_id}) {
       return;
     }
     const user = JSON.parse(localStorage.getItem('user'));
-    try {
-      const response = await fetch(`http://localhost:9090/reviews/addReview/${museum_id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user: user,
-          rating: newRating,
-          comment: newComment,
-        }),
-      });
+    if(user === null){
+      alert("You must log in first!.")
+      router.push('/HomePage')
+      return
+    }else{
+      try {
+        const response = await fetch(`${configUrl}/reviews/addReview/${museum_id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user: user,
+            rating: newRating,
+            comment: newComment,
+          }),
+        });
 
-      if (response.ok) {
-        const addedReview = await response.json();
-        setReviews([...reviews, addedReview]);
-        setNewComment('');
-        setNewRating(5);
-        alert('Comment added successfully!');
-      } else {
-        alert('Failed to add comment.');
+        if (response.ok) {
+          const addedReview = await response.json();
+          setReviews([...reviews, addedReview]);
+          setNewComment('');
+          setNewRating(5);
+          alert('Comment added successfully!');
+        } else {
+          alert('Failed to add comment.');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('An error occurred. Please try again later.');
       }
-    } catch (error) {
-      console.error(error);
-      alert('An error occurred. Please try again later.');
     }
+  };
+
+  const mapApi= () => {
+    // Hardcoded location for the example (latitude, longitude)
+    const latitude = museum?.latitude;
+    const longitude = museum?.longitude; // Coordinates of the Empire State Building
+
+    // Open Google Maps with the specified coordinates
+    const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
+    window.open(url, "_blank"); // Open in a new tab
   };
 
 
@@ -147,8 +167,8 @@ function DetailMuseum({museum_id}) {
               <li>❤️ 1543 likes</li>
             </ul>
             <div className="button-group">
-              <button className="btn">Directions</button>
-              <button className="btn">Call</button>
+              <button onClick={mapApi} className="btn">Directions</button>
+              <button className="btn" onClick={() => window.open(`tel:${museum?.no_telpon}`, "_self")}>Call</button>
               <Link href={`/OrderPage/${museum_id}`} passHref>
                 <button className="btn primary">
                   Buy Tickets
@@ -160,7 +180,7 @@ function DetailMuseum({museum_id}) {
 
         {/* Reviews Section */}
         <div className="reviews">
-          <h3 className="reviews-title">Reviews for Museum Geologi</h3>
+          <h3 className="reviews-title">Reviews for {museum?.nama}</h3>
           {reviews.map((review, index) => (
             <div key={index} className="review-card">
               <p className="review-card-title">

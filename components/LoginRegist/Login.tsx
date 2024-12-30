@@ -5,6 +5,7 @@ import '@/css/Login.css';
 import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
 import Link from 'next/link';
+import { configUrl } from '@/config.js';
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -25,24 +26,28 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    const isAdmin = formData.email.endsWith('@mtix.com'); // Check if email ends with @mtix.com
+    const apiUrl = isAdmin 
+      ? `${configUrl}/admins/login` // Admin login API
+      : `${configUrl}/users/login`; // User login API
+  
     try {
-      const response = await fetch('http://localhost:9090/users/login', {  
+      const response = await fetch(apiUrl, {  
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData)
       });
-
+  
       if (response.ok) {
         const userData = await response.json();
-        console.log(userData); 
-
-        localStorage.setItem('user', JSON.stringify(userData));  
-
-
-        router.push('/HomePage');  
+  
+        localStorage.setItem('user', JSON.stringify(userData));
+  
+        const redirectPage = isAdmin ? '/ViewAdmin' : '/HomePage'; // Redirect based on user type
+        router.push(redirectPage);
       } else {
         setErrorMessage('Invalid email or password');
       }
