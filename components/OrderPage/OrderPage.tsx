@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,} from 'react';
+import { useRouter } from 'next/router'; 
 import axios from 'axios'; // For making API calls
 import '../../css/OrderPage.css';
 // import '@/css/DetailTiketMuseum.css';
@@ -14,6 +15,8 @@ function OrderPage({museum_id}) {
   const [totalHarga, setTotalHarga] = useState<number | null>(null);
   const [groupName, setGroupName] = useState(''); // Manage the group name based on ticket type
   const [museum, setMuseum] = useState(null);
+  const router = useRouter();
+
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -22,7 +25,8 @@ function OrderPage({museum_id}) {
       const parsedUserId = parseInt(parsedUser.user_id, 10); 
       setUserId(parsedUserId); 
     } else {
-      console.log('No user found in localStorage'); 
+      alert('You need to log in first');
+      router.push('/Login');
     }
   
   }, []);
@@ -90,7 +94,7 @@ function OrderPage({museum_id}) {
       }
 
       const museum = await response.json();
-      console.log("Fetched museum:", museum);
+      setMuseum(museum);
       return museum;
     } catch (error) {
       console.error("Error fetching museum details:", error);
@@ -154,6 +158,8 @@ function OrderPage({museum_id}) {
   };
 
   const handlePayment = async () => { 
+    const storedUser = localStorage.getItem('user');
+    const parsedUser = JSON.parse(storedUser);
     const paymentData = {
       metode_pembayaran: selectedPayment,
       bank: selectedPayment === "Transfer Bank" || selectedPayment === "Virtual Account" ? selectedBank : null,
@@ -162,7 +168,9 @@ function OrderPage({museum_id}) {
       jenis_tiket: keranjang?.jenis_tiket,
       jumlah_tiket: keranjang?.jumlah_tiket,
       total_harga: keranjang?.total_harga,
-      keranjang: keranjang
+      keranjang: keranjang,
+      user: parsedUser,
+      museum: museum
     };
   
     console.log(paymentData);
@@ -203,16 +211,15 @@ function OrderPage({museum_id}) {
       keranjang: keranjang,
       payment: payment,
       kode_tiket: "some_ticket_code", 
+      tanggal_kunjungan: new Date().toISOString().split('T')[0]
     };
   
-    // Determine URL based on the call type
     let url = `http://localhost:9090/${call}/createTicket`;
     if (call !== "tiketregulers") {
       url += `/${groupName}/${keranjang?.jumlah_tiket}`;
     }
   
-    // Loop through the quantity of tickets (keranjang?.jumlah_tiket)
-    const ticketCount = keranjang?.jumlah_tiket || 1;  // Default to 1 if undefined or null
+    const ticketCount = keranjang?.jumlah_tiket || 1;  
   
     try {
       for (let i = 0; i < ticketCount; i++) {
@@ -226,7 +233,7 @@ function OrderPage({museum_id}) {
   
         if (response.ok) {
           const result = await response.json();
-          console.log(`Ticket ${i + 1} created:`, result);
+          router.push('/MyTicket');
         } else {
           const error = await response.text();
           alert(`Ticket creation failed: ${error}`);
@@ -277,19 +284,11 @@ function OrderPage({museum_id}) {
             <div className="button-group">
               <button className="btn">Directions</button>
               <button className="btn">Call</button>
-              <button className="btn primary">Buy Tickets</button>
             </div>
           </div>
         </div>
 
-          {/* Summary Section */}
-          <div className="ticket-summary">
-            <h4>Summary:</h4>
-            <p>
-              Location: Museum Geologi | Date: Thu, 21 Nov 2024 | Reguler: 10000 | Anak: 100000
-            </p>
-            <button className="btn primary checkout-btn">Check Out</button>
-          </div>
+
       </div>
 
 
@@ -304,7 +303,7 @@ function OrderPage({museum_id}) {
 
             <div className="museumTiket">
               <Image
-                src={museumGeologiImage} // Ensure the image path matches your project structure
+                src="/images/Museum_Geologi.jpg" // Ensure the image path matches your project structure
                 width={100}
                 height={100}
                 alt="Museum Geologi"
@@ -325,7 +324,7 @@ function OrderPage({museum_id}) {
 
             <div className="museumTiket">
               <Image
-                src={museumGeologiImage} // Ensure the image path matches your project structure
+                src="/images/Museum_Geologi.jpg" // Ensure the image path matches your project structure
                 width={100}
                 height={100}
                 alt="Museum Geologi"
@@ -346,7 +345,7 @@ function OrderPage({museum_id}) {
 
             <div className="museumTiket">
               <Image
-                src={museumGeologiImage} // Ensure the image path matches your project structure
+                src="/images/Museum_Geologi.jpg"  // Ensure the image path matches your project structure
                 width={100}
                 height={100}
                 alt="Museum Geologi"
@@ -365,13 +364,10 @@ function OrderPage({museum_id}) {
               </div>
             </div>
 
-            
-      
-
-
           </div>
 
           <div className="cost-section">
+
             <h3>Cost Information</h3>
             <div className="cost-item">
               <div className="tiketitem">
@@ -389,23 +385,39 @@ function OrderPage({museum_id}) {
               </span>
             </div>
 
-            <div className="input-field">
-              <label htmlFor={keranjang?.jenis_tiket === 'Tiket Pelajar' ? 'nama_sekolah' : 'nama_keluarga'}>
-                {keranjang?.jenis_tiket === 'Tiket Pelajar' ? 'Nama Sekolah' : 'Nama Keluarga'}
-              </label>
-              <input
-                type="text"
-                id={keranjang?.jenis_tiket === 'Tiket Pelajar' ? 'nama_sekolah' : 'nama_keluarga'}
-                name={keranjang?.jenis_tiket === 'Tiket Pelajar' ? 'nama_sekolah' : 'nama_keluarga'}
-                value={groupName} // Use the state value
-                onChange={handleInputChange}
-              />
-            </div>
+            {(keranjang?.jenis_tiket === 'Tiket Pelajar' || keranjang?.jenis_tiket === 'Tiket Keluarga') && (
+              <div className="input-field">
+                <label
+                  className="group-name"
+                  htmlFor={keranjang?.jenis_tiket === 'Tiket Pelajar' ? 'nama_sekolah' : 'nama_keluarga'}
+                >
+                  {keranjang?.jenis_tiket === 'Tiket Pelajar' ? 'Nama Sekolah' : 'Nama Keluarga'}
+                </label>
+                <input
+                  type="text"
+                  id={keranjang?.jenis_tiket === 'Tiket Pelajar' ? 'nama_sekolah' : 'nama_keluarga'}
+                  name={keranjang?.jenis_tiket === 'Tiket Pelajar' ? 'nama_sekolah' : 'nama_keluarga'}
+                  value={groupName} // Use the state value
+                  onChange={handleInputChange}
+                  className='input-field'
+                />
+              </div>
+            )}
 
             <div className="cost-quantity">
-              <button className="quantity-btn" onClick={() => handleQuantityChange('decrease')}>-</button>
+              <button
+                className="quantity-btn decrease"
+                onClick={() => handleQuantityChange('decrease')}
+              >
+                -
+              </button>
               <span className="quantity-display">{keranjang?.jumlah_tiket}</span>
-              <button className="quantity-btn" onClick={() => handleQuantityChange('increase')}>+</button>
+              <button
+                className="quantity-btn increase"
+                onClick={() => handleQuantityChange('increase')}
+              >
+                +
+              </button>
             </div>
 
             <div className="cost-total">
@@ -414,85 +426,84 @@ function OrderPage({museum_id}) {
             </div>
 
             <div className="cost-buttons">
-              <button className="cancel-btn">Cancel</button>
               <button className="checkout-btn" onClick={handleCheckout}>
                 Checkout
               </button>
             </div>
                   
             {showPopOut && (
-                <div className="pop-out-overlay">
-                  <div className="pop-out-content">
-                    <h2>Choose Payment Method</h2>
+              <div className="pop-out-overlay">
+                <div className="pop-out-content">
+                  <h2>Choose Payment Method</h2>
 
-                    <div className="payment-option">
-                      <h3>Transfer Bank</h3>
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="Transfer Bank"
-                        checked={selectedPayment === "Transfer Bank"}
-                        onChange={() => handlePaymentChange("Transfer Bank")}
-                      />
-                    </div>
-
-                    <div className="payment-option">
-                      <h3>Virtual Account</h3>
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="Virtual Account"
-                        checked={selectedPayment === "Virtual Account"}
-                        onChange={() => handlePaymentChange("Virtual Account")}
-                      />
-                      <select
-                        value={selectedBank}
-                        onChange={(e) => setSelectedBank(e.target.value)}
-                        disabled={
-                          selectedPayment !== "Transfer Bank" && selectedPayment !== "Virtual Account"
-                        }
-                      >
-                        <option value="">Select a Bank</option>
-                        {bankOptions.map((bank, index) => (
-                          <option key={index} value={bank}>
-                            {bank}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="payment-option">
-                      <h3>OVO</h3>
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="OVO"
-                        checked={selectedPayment === "OVO"}
-                        onChange={() => handlePaymentChange("OVO")}
-                      />
-                    </div>
-
-                    <div className="payment-option">
-                      <h3>Gopay</h3>
-                      <input
-                        type="radio"
-                        name="payment"
-                        value="Gopay"
-                        checked={selectedPayment === "Gopay"}
-                        onChange={() => handlePaymentChange("Gopay")}
-                      />
-                    </div>
-
-                    <button className="close-btn" onClick={handlePayment}>
-                      Bayar
-                    </button>
-
-                    <button className="close-btn" onClick={handleClose}>
-                      Close
-                    </button>
+                  <div className="payment-option">
+                    <h3>Transfer Bank</h3>
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="Transfer Bank"
+                      checked={selectedPayment === "Transfer Bank"}
+                      onChange={() => handlePaymentChange("Transfer Bank")}
+                    />
                   </div>
+
+                  <div className="payment-option">
+                    <h3>Virtual Account</h3>
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="Virtual Account"
+                      checked={selectedPayment === "Virtual Account"}
+                      onChange={() => handlePaymentChange("Virtual Account")}
+                    />
+                    <select
+                      value={selectedBank}
+                      onChange={(e) => setSelectedBank(e.target.value)}
+                      disabled={
+                        selectedPayment !== "Transfer Bank" && selectedPayment !== "Virtual Account"
+                      }
+                    >
+                      <option value="">Select a Bank</option>
+                      {bankOptions.map((bank, index) => (
+                        <option key={index} value={bank}>
+                          {bank}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="payment-option">
+                    <h3>OVO</h3>
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="OVO"
+                      checked={selectedPayment === "OVO"}
+                      onChange={() => handlePaymentChange("OVO")}
+                    />
+                  </div>
+
+                  <div className="payment-option">
+                    <h3>Gopay</h3>
+                    <input
+                      type="radio"
+                      name="payment"
+                      value="Gopay"
+                      checked={selectedPayment === "Gopay"}
+                      onChange={() => handlePaymentChange("Gopay")}
+                    />
+                  </div>
+
+                  <button className="close-btn" onClick={handlePayment}>
+                    Bayar
+                  </button>
+
+                  <button className="close-btn" onClick={handleClose}>
+                    Close
+                  </button>
                 </div>
-              )}
+              </div>
+            )}
 
 
           </div>

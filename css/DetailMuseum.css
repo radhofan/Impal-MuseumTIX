@@ -129,3 +129,62 @@
         flex-direction: column;
     }
 }
+
+/* Container for the add-comment section */
+.add-comment {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Title for the add-comment section */
+  .add-comment h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #333;
+  }
+  
+  /* Styling the textarea for comment input */
+  .comment-input {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    resize: vertical;
+    outline: none;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Change border color when focused */
+  .comment-input:focus {
+    border-color: #007bff;
+  }
+  
+  /* Styling the rating select dropdown */
+  .rating-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    background-color: #fff;
+    font-family: Arial, sans-serif;
+  }
+
+  .button-container{
+    justify-content: center;
+    align-items: center;
+  }
+  
+  

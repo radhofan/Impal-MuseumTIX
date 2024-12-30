@@ -8,31 +8,34 @@ import Link from 'next/link';
 import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 
 function DetailMuseum({museum_id}) {
-  const [regularTickets, setRegularTickets] = useState(1);
-  const [familyTickets, setFamilyTickets] = useState(0);
-  const [childTickets, setChildTickets] = useState(4);
+
   const [museumId, setMuseumId] = useState(null);
   const [museum, setMuseum] = useState([]);
+  const [reviews, setReviews] = useState([])
 
+   // Directly fetch data when museum_id is available
   useEffect(() => {
+    // Only call the async function if museum_id is available
     if (museum_id) {
-      setMuseumId(museum_id);  
-    }
-  }, []);
+      async function getStuff() {
+        try {
+          const museumData = await fetchMuseums();  // Fetch using museum_id
+          setMuseum(museumData);
 
-  useEffect(() => {
-    if (museumId) {
-      async function getMuseums() {
-        const data = await fetchMuseums();
-        setMuseum(data);
+          const reviewsData = await fetchReviews();  // Fetch using museum_id
+          setReviews(reviewsData);
+        } catch (error) {
+          console.error("Error fetching museum and reviews:", error);
+        }
       }
-  
-      getMuseums(); 
+
+      getStuff(); // Trigger the fetch only when museum_id is available
+    } else {
+      console.log('museum_id is not available');
     }
-  }, [museumId]);
+  }, [museum_id]);
 
   async function fetchMuseums() {
     try {
@@ -42,7 +45,7 @@ function DetailMuseum({museum_id}) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: museumId }), // Pass the museumId in the request body
+        body: JSON.stringify({ id: museum_id }), // Pass the museumId in the request body
       });
 
       if (!response.ok) {
@@ -50,12 +53,70 @@ function DetailMuseum({museum_id}) {
       }
 
       const museum = await response.json();  
-      console.log(museum);
       return museum;
     } catch (error) {
       console.error("Error fetching museum details:", error);
     }
   }
+
+  async function fetchReviews() {
+    try {
+      // Send a POST request with museumId in the body
+      const response = await fetch(`http://localhost:9090/reviews/getAllMuseumReviews/${museum_id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const reviews = await response.json();  
+      console.log(reviews);
+      return reviews;
+    } catch (error) {
+      console.error("Error fetching reviewdetails:", error);
+    }
+  }
+
+  const [newComment, setNewComment] = useState('');
+  const [newRating, setNewRating] = useState(5);
+
+  const handleAddComment = async () => {
+    if (newComment.trim() === '') {
+      alert('Comment cannot be empty');
+      return;
+    }
+    const user = JSON.parse(localStorage.getItem('user'));
+    try {
+      const response = await fetch(`http://localhost:9090/reviews/addReview/${museum_id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user: user,
+          rating: newRating,
+          comment: newComment,
+        }),
+      });
+
+      if (response.ok) {
+        const addedReview = await response.json();
+        setReviews([...reviews, addedReview]);
+        setNewComment('');
+        setNewRating(5);
+        alert('Comment added successfully!');
+      } else {
+        alert('Failed to add comment.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('An error occurred. Please try again later.');
+    }
+  };
 
 
   return (
@@ -65,10 +126,9 @@ function DetailMuseum({museum_id}) {
       <div className="detailmuseum-section1">
         {/* Museum Information Section */}
         <div className="museum-info">
-          <h1>Museum Details for ID: {museumId}</h1>
           <div className="img">
             <Image
-              src="/images/museum-geologi.jpg" // Ensure the image path matches your project structure
+              src="/images/Museum_Geologi.jpg" // Ensure the image path matches your project structure
               width={500}
               height={500}
               alt="Museum Geologi"
@@ -76,12 +136,9 @@ function DetailMuseum({museum_id}) {
             />
           </div>
           <div className="museum-details">
-            <h1 className="museum-title">Museum Geologi</h1>
+            <h1 className="museum-title">{museum?.nama}</h1>
             <p className="museum-description">
-              Museum Geologi didirikan pada tanggal 16 Mei 1929. Museum ini direnovasi dengan
-              mendapat dana bantuan dari JICA, setelah renovasi selesai, Museum Geologi dibuka
-              kembali dan diresmikan oleh Wakil Presiden RI, Megawati Soekarnoputri pada 23
-              Agustus 2000.
+              {museum?.keterangan}
             </p>
             <ul className="museum-info-list">
               <li>📍 Jl. Diponegoro No.57, Kota Bandung Jawa Barat</li>
@@ -104,38 +161,48 @@ function DetailMuseum({museum_id}) {
         {/* Reviews Section */}
         <div className="reviews">
           <h3 className="reviews-title">Reviews for Museum Geologi</h3>
-          {[
-            {
-              name: 'Hakam Jawa',
-              rating: 4,
-              comment:
-                'This museum is amazing! The collection is rich and informative, with modern and interactive exhibits. The staff are friendly, the atmosphere is welcoming, and it\'s perfect for learning while enjoying art and history.',
-            },
-            {
-              name: 'Azmi Pecel',
-              rating: 4,
-              comment:
-                'This museum is very fascinating! Each exhibit is well-organized and tells a story, making the visit even more memorable. A must-visit place for art and history enthusiasts!',
-            },
-            {
-              name: 'Rado Depok',
-              rating: 4,
-              comment:
-                'This museum is very fascinating! Each exhibit is well-organized and tells a story, making the visit even more memorable. A must-visit place for art and history enthusiasts!',
-            },
-          ].map((review, index) => (
+          {reviews.map((review, index) => (
             <div key={index} className="review-card">
               <p className="review-card-title">
-                <strong>{review.name}</strong> {Array(review.rating).fill('⭐').join('')}
+                <strong>{review.user.nama}</strong> {Array(review.rating).fill('⭐').join('')}
               </p>
               <p className="review-comment">"{review.comment}"</p>
             </div>
           ))}
         </div>
       </div>
+
+        {/* Add Comment Section */}
+        <div className="add-comment">
+          <h3>Add a Comment</h3>
+          <textarea
+            className="comment-input"
+            placeholder="Write your comment here..."
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+          />
+          <select
+            className="rating-input"
+            value={newRating}
+            onChange={(e) => setNewRating(Number(e.target.value))}
+          >
+            {[1, 2, 3, 4, 5].map((rating) => (
+              <option key={rating} value={rating}>
+                {rating} ⭐
+              </option>
+            ))}
+          </select>
+          <div className='button-container'>
+            <button className="btn primary" onClick={handleAddComment}>
+              Submit
+            </button>
+          </div>
+        </div>
+
       <Footer />
     </div>
   );
+
 }
 
 export default DetailMuseum;

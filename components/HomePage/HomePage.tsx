@@ -8,6 +8,7 @@ import '../../css/Navbar.css';
 import 'swiper/css'; 
 import 'swiper/css/pagination'; 
 import 'swiper/css/navigation';
+import Image from 'next/image';
 
 import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
@@ -39,7 +40,6 @@ const HomePage = () => {
       getMuseums(); 
   }, []);
 
-  //Function Cari Museum
   async function fetchMuseums() {
     try {
         const response = await fetch("http://localhost:9090/museums/getAll", {
@@ -52,7 +52,6 @@ const HomePage = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const museums = await response.json();
-        console.log(museums);
         return museums;
     } catch (error) {
         console.error("Error fetching museums:", error);
@@ -187,7 +186,14 @@ const HomePage = () => {
             museumsToDisplay.map((museum, index) => (
               <Link key={index} href={`/DetailMuseum/${museum.museum_id}`} passHref>
                 <div className='card'>
-                  <div className='card-image'></div>
+                  {/* <div className='card-image'></div> */}
+                  <Image
+                    src="/images/Museum_Geologi.jpg" // Ensure the image path matches your project structure
+                    width={500}
+                    height={500}
+                    alt="Museum Geologi"
+                    className="card-image"
+                  />
                   <div className='card-info'>
                     <span className='card-title'>{museum.nama}</span>
                     <span className='card-address'>{museum.lokasi}</span>

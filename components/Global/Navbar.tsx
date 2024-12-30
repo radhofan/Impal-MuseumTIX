@@ -7,7 +7,7 @@ const Navbar = () => {
   const [user, setUser] = useState(null);
   const router = useRouter();
 
-  // Check for user in localStorage only on the client-side
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedUser = localStorage.getItem('user');
@@ -17,11 +17,10 @@ const Navbar = () => {
     }
   }, []);
 
-  // Handle Logout
   const handleLogout = () => {
     localStorage.removeItem('user');
-    setUser(null);  // Clear user state
-    router.push('/Login');  // Redirect to the login page
+    setUser(null);  
+    router.push('/Login');  
   };
 
   return (
@@ -35,22 +34,23 @@ const Navbar = () => {
             <Link href="/HomePage" passHref>
               <div className='navbar-tulisan'>Home</div>
             </Link>
-            <div className='navbar-tulisan'>My Ticket</div>
-            <div className='navbar-tulisan'>Order</div>
+            <Link href="/MyTicket" passHref>
+              <div className='navbar-tulisan'>My Ticket</div>
+            </Link>
+            <Link href={`/OrderPage/${user?.keranjang.museum.museum_id}`} passHref>
+              <div className='navbar-tulisan'>Order</div>
+            </Link>
         </div>
 
         <div className='navbar-kanan'>
-          {/* Check if the user is logged in */}
           {user ? (
-            // If user is logged in, display their username and logout button
             <div className='navbar-user'>
               <div className='navbar-tulisan' id='username'>
-                {user.nama} {/* Display user's name */}
+                {user.nama} 
               </div>
               <button className="navbar-tulisan" onClick={handleLogout}>Logout</button>
             </div>
           ) : (
-            // If user is not logged in, show Daftar and Masuk buttons
             <>
               <Link href="/Regist" passHref>
                 <div className='navbar-tulisan' id='daftar'>Daftar</div>

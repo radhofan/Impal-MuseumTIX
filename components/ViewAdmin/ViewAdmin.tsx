@@ -1,58 +1,52 @@
 // components/ViewAdmin/ViewAdmin.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import '../../css/ViewAdmin.css';
 import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
-
-// Define the Museum interface
-interface Museum {
-  museum_id: number;
-  nama: string;
-  lokasi: string;
-  no_telpon: string;
-  rating: number;
-  popular: boolean;
-  image: string;
-}
-
-// Static data for museums
-const staticMuseums: Museum[] = [
-  {
-    museum_id: 1,
-    nama: "Museum Geologi",
-    lokasi: "Jl. Diponegoro No.57, Kota Bandung, Jawa Barat",
-    no_telpon: "021-12345678",
-    rating: 4.5,
-    popular: true,
-    image: "/images/Museum_Geologi.jpg",
-  },
-  {
-    museum_id: 2,
-    nama: "Taman Patung NuArt",
-    lokasi: "Jalan Setra Duta Raya No. 6 L Bandung",
-    no_telpon: "021-98765432",
-    rating: 4.3,
-    popular: false,
-    image: "/images/NuArt.jpg",
-  },
-  {
-    museum_id: 3,
-    nama: "Museum Konperensi Asia Afrika",
-    lokasi: "Jl. Asia Afrika No.65, Braga, Kec. Sumur Bandung, Kota Bandung, Jawa Barat 40111",
-    no_telpon: "0274-123456",
-    rating: 4.2,
-    popular: true,
-    image: "/images/AsiaAfrika.jpg",
-  },
-];
+import Image from 'next/image';
 
 const ViewAdmin = () => {
-  const [museums, setMuseums] = useState(staticMuseums);
+  const [museums, setMuseums] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
 
-  // Filter museums based on search term
-  const filteredMuseums = museums.filter((museum) =>
+  // Fetch museums from the API when the component is mounted
+  useEffect(() => {
+    async function getMuseums() {
+      const data = await fetchMuseums();
+      setMuseums(data);
+      setLoading(false); 
+    }
+
+    getMuseums(); 
+  }, []);
+
+  // Fetch museums function
+  async function fetchMuseums() {
+    try {
+      const response = await fetch('http://localhost:9090/museums/getAll', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const museums = await response.json();
+      console.log(museums);
+      return museums;
+    } catch (error) {
+      console.error('Error fetching museums:', error);
+      return []; // Return an empty array in case of an error
+    }
+  }
+
+  // Filter museums based on the search term
+  const filteredMuseums = museums.filter((museum: any) =>
     museum.nama.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -75,16 +69,28 @@ const ViewAdmin = () => {
       </div>
 
       <div className="museum-list">
-        {filteredMuseums.length > 0 ? (
-          filteredMuseums.map((museum) => (
+        {loading ? (
+          <p>Loading museums...</p>
+        ) : filteredMuseums.length > 0 ? (
+          filteredMuseums.map((museum: any) => (
             <div key={museum.museum_id} className="museum-item">
-              <img src={museum.image} alt={museum.nama} className="museum-image" />
+              {/* Remove image if not available */}
+              <Image
+                src="/images/Museum_Geologi.jpg" // Ensure the image path matches your project structure
+                width={500}
+                height={500}
+                alt="Museum Geologi"
+                className="card-image"
+              />
               {museum.popular && <span className="popular-badge">Popular</span>}
               <h2>{museum.nama}</h2>
-              <p>Rating: ⭐ {museum.rating} </p>
+              <p>Rating: ⭐ {museum.rating}</p>
               <p>📍 {museum.lokasi}</p>
-              <Link href={`/EditMuseum/${museum.museum_id}`}>
+              <Link href={`/Edit/${museum.museum_id}`}>
                 <button className="edit-button">Edit</button>
+              </Link>
+              <Link href={`/Delete/${museum.museum_id}`}>
+                <button className="edit-button">Delete</button>
               </Link>
             </div>
           ))

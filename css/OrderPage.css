@@ -47,7 +47,6 @@
   .ticket-item {
     display: flex;
     align-items: center;
-    margin-bottom: 1.5rem;
     border: 1px solid #ddd;
     padding: 0.8rem;
     border-radius: 10px;
@@ -55,6 +54,7 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     color: black;
     justify-content: center;
+    margin-left: 15px;
   }
   
   .ticket-image {
@@ -219,6 +219,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-bottom: 20px;
   }
   
   .quantity-btn {
@@ -304,7 +305,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
   margin: 30px;
 }
 
@@ -520,6 +521,7 @@
 .ticket-summary p {
   font-size: 14px;
   line-height: 1.5;
+  color: black;
 }
 
 .checkout-btn {
@@ -538,4 +540,82 @@
 
 .checkout-btn:hover {
   background-color: #d62736;
+}
+
+.museum-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.museum-description {
+  margin-bottom: 20px;
+  line-height: 1.6;
+  color: black;
+}
+
+.museum-info-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  line-height: 1.8;
+  color: black;
+}
+
+.group-name{
+  color: black;
+}
+
+.input-field input {
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 5px;
+  border: 2px solid #ccc; /* Light gray border */
+  border-radius: 4px; /* Optional: gives rounded corners */
+  outline: none; /* Removes default focus outline */
+  color: black;;
+}
+
+.input-field input:focus {
+  border-color: #343634; /* Green border on focus */
+}
+
+.input-field label {
+  display: block;
+  margin-bottom: 5px;
+  color: black;
+}
+
+.input-field {
+  margin-bottom: 15px;
+}
+
+.quantity-btn {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  background-color: transparent;
+  border: 2px solid white;
+  cursor: pointer;
+  display: flex;
+  justify-content: center; /* Centers the content horizontally */
+  align-items: center; /* Centers the content vertically */
+}
+
+.quantity-btn.decrease {
+  background-color: red;
+}
+
+.quantity-btn.increase {
+  background-color: green;
+}
+
+.quantity-display {
+  font-size: 20px;
+  color: white;
+  margin: 0 10px; /* Add space between the buttons and the display */
+  display: inline-block;
 }

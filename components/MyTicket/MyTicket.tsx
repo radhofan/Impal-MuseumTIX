@@ -1,66 +1,11 @@
-// // MyTicket.tsx
-// import React from 'react';
-// import '../../css/MyTicket.css';
-
-// import Navbar from '@/components/Global/Navbar';
-// import Footer from '@/components/Global/Footer';
-
-// const TicketCard = () => {
-//   return (
-//     <div className="ticket-card">
-//       <div className="ticket-date">31 November 2003</div>
-//       <div className="ticket-info-container">
-//         <img
-//           src="/museum-image-placeholder.png"
-//           alt="Museum"
-//           className="ticket-image"
-//         />
-//         <div className="ticket-details">
-//           <div className="ticket-museum-name">Museum Geologi</div>
-//           <div className="ticket-type">Reguler</div>
-//         </div>
-//         <div className="ticket-summary">
-//           <div className="ticket-quantity">Jumlah: 1</div>
-//           <div className="ticket-price">Harga: Rp. 20.000</div>
-//         </div>
-//       </div>
-//       <div className="ticket-status">Status: <span className="ticket-status-text">Lunas</span></div>
-//       <button className="ticket-detail-button">Detail</button>
-//     </div>
-//   );
-// };
-
-// function MyTicket() {
-//   return (
-//     <div className='myticket-body'>
-//         <Navbar/>
-//         <div className='myticket-section1'>
-//           <h2 className="ticket-header">Tickets Overview</h2>
-//           <div className="ticket-container">
-//             <div className="ticket-side-menu">
-//               <button className="menu-button">Upcoming</button>
-//               <button className="menu-button">Completed</button>
-//               <button className="menu-button">Cancelled</button>
-//             </div>
-//             <div className="ticket-main-content">
-//               <TicketCard />
-//             </div>
-//           </div>
-//         </div>
-//         <Footer/>
-//     </div>
-//   )
-// }
-
-// export default MyTicket;
-
-// MyTicket.tsx
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import '../../css/MyTicket.css';
 
 import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
 import axios from 'axios';
+import Image from 'next/image';
 
 const TicketCard = ({ ticket }: { ticket: any}) => {
 
@@ -93,15 +38,18 @@ const TicketCard = ({ ticket }: { ticket: any}) => {
         {ticket.payment?.tanggal_pembayaran || "Date not available"}
       </div>
       <div className="ticket-info-container">
-        <img
-          src="/museum-image-placeholder.png"
+        <Image
+          src="/images/Museum_Geologi.jpg" // Ensure the image path matches your project structure
           alt={ticket.museum?.nama || "Museum"}
+          width={500}
+          height={500}
           className="ticket-image"
         />
         <div className="ticket-details">
           <div className="ticket-museum-name">{ticket.museum?.nama}</div>
           <div className="ticket-type">{ticket.jenis_tiket}</div>
           <div className="ticket-location">{ticket.museum?.lokasi}</div>
+          <div className="ticket-location">{ticket.tanggal_kunjungan}</div>
         </div>
         <div className="ticket-summary">
           <div className="ticket-quantity">
@@ -137,6 +85,9 @@ function MyTicket() {
   const [tiketPelajars, setTiketPelajars] = useState([]);
 
   const [activeTickets, setActiveTickets] = useState([]);
+  const [payments, setPayments] = useState([]);  // For storing payment history
+  const [showPayments, setShowPayments] = useState(false); 
+  const router = useRouter();
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -146,7 +97,8 @@ function MyTicket() {
       const parsedUserId = parseInt(parsedUser.user_id, 10); 
       setUserId(parsedUserId); 
     } else {
-      console.log('No user found in localStorage'); 
+      alert('You need to log in first');
+      router.push('/Login');
     }
   
   }, []);
@@ -236,12 +188,32 @@ function MyTicket() {
   
   const handleStatusClick = (status: string) => {
     setActiveStatus(status);
+    setShowPayments(false);
   };
 
 
   useEffect(() => {
     fetchTickets();
   }, [keranjang]);
+
+  // Function to fetch payments (payment history)
+  useEffect(() => {
+    const fetchPayments = async () => {
+      try {
+        // Replace with your actual API call for payment history
+        const response = await fetch(`http://localhost:9090/payments/viewUserHistory/${keranjang?.keranjang_id}`);
+        const data = await response.json();
+        console.log(data)
+        setPayments(data);
+      } catch (error) {
+        setError('Failed to load payment history');
+      }
+    };
+
+    if (showPayments) {
+      fetchPayments();
+    }
+  }, [showPayments]);
 
 
   return (
@@ -252,33 +224,65 @@ function MyTicket() {
         <div className="ticket-container">
           <div className="ticket-side-menu">
             <button
-              className={`menu-button ${activeStatus === "Upcoming" ? "active" : ""}`}
-              onClick={() => handleStatusClick("Upcoming")}
+              className={`menu-button ${activeStatus === 'Upcoming' ? 'active' : ''}`}
+              onClick={() => handleStatusClick('Upcoming')}
             >
               Upcoming
             </button>
             <button
-              className={`menu-button ${activeStatus === "Cancelled" ? "active" : ""}`}
-              onClick={() => handleStatusClick("Cancelled")}
+              className={`menu-button ${activeStatus === 'Cancelled' ? 'active' : ''}`}
+              onClick={() => handleStatusClick('Cancelled')}
             >
               Cancelled
             </button>
             <button
-              className={`menu-button ${activeStatus === "Finished" ? "active" : ""}`}
-              onClick={() => handleStatusClick("Finished")}
+              className={`menu-button ${activeStatus === 'Finished' ? 'active' : ''}`}
+              onClick={() => handleStatusClick('Finished')}
             >
               Finished
+            </button>
+
+            {/* Add button for payment history */}
+            <button
+              className={`menu-button ${showPayments ? 'active' : ''}`}
+              onClick={() => setShowPayments(!showPayments)}
+            >
+              Payment History
             </button>
           </div>
 
           <div className="ticket-main-content">
             {loading && <p>Loading tickets...</p>}
             {error && <p className="error-message">{error}</p>}
-            {!loading && filteredTickets.length === 0 && <p>No tickets found for {activeStatus} status.</p>}
-            {!loading &&
-              filteredTickets.map(ticket => (
-                <TicketCard key={ticket.tiket_id} ticket={ticket}/>
-              ))}
+
+            {/* Show either ticket list or payment history */}
+            {!loading && !showPayments && filteredTickets.length === 0 && (
+              <p>No tickets found for {activeStatus} status.</p>
+            )}
+
+            {/* Display tickets */}
+            {!loading && !showPayments && filteredTickets.length > 0 && (
+              <div className="ticket-grid">
+                {filteredTickets.map(ticket => (
+                  <TicketCard key={ticket.tiket_id} ticket={ticket} />
+                ))}
+              </div>
+            )}
+
+            {/* Display payment history */}
+            {!loading && showPayments && payments.length === 0 && <p>No payment history found.</p>}
+            {!loading && showPayments && payments.length > 0 && (
+              <div className="payment-history">
+                <h3>Payment History</h3>
+                {payments.map(payment => (
+                  <div key={payment.payment_id} className="payment-item">
+                    <p>Payment ID: {payment.payment_id}</p>
+                    <p>Amount: ${payment.total_harga}</p>
+                    <p>Date: {new Date(payment.tanggal_pembayaran).toLocaleDateString()}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
