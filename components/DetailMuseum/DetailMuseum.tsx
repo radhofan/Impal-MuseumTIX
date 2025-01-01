@@ -19,25 +19,42 @@ function DetailMuseum({ museum_id }: { museum_id: number }) {
   const [reviews, setReviews] = useState([]);
   const router = useRouter();
 
-   // Directly fetch data when museum_id is available
+  //  // Directly fetch data when museum_id is available
+  // useEffect(() => {
+  //   // Only call the async function if museum_id is available
+  //   if (museum_id) {
+  //     async function getStuff() {
+  //       try {
+  //         const museumData = await fetchMuseums();  // Fetch using museum_id
+  //         setMuseum(museumData);
+
+  //         const reviewsData = await fetchReviews();  // Fetch using museum_id
+  //         setReviews(reviewsData);
+  //       } catch (error) {
+  //         console.error("Error fetching museum and reviews:", error);
+  //       }
+  //     }
+
+  //     getStuff(); // Trigger the fetch only when museum_id is available
+  //   } else {
+  //     console.log('museum_id is not available');
+  //   }
+  // }, [museum_id]);
+
+  // Define the async function outside the block
+  const getStuff = async () => {
+    try {
+      const museumData = await fetchMuseums();  // Fetch using museum_id
+      setMuseum(museumData);
+    } catch (error) {
+      console.error('Failed to fetch museum data:', error);
+    }
+  };
+
+  // Only call the async function if museum_id is available
   useEffect(() => {
-    // Only call the async function if museum_id is available
     if (museum_id) {
-      async function getStuff() {
-        try {
-          const museumData = await fetchMuseums();  // Fetch using museum_id
-          setMuseum(museumData);
-
-          const reviewsData = await fetchReviews();  // Fetch using museum_id
-          setReviews(reviewsData);
-        } catch (error) {
-          console.error("Error fetching museum and reviews:", error);
-        }
-      }
-
-      getStuff(); // Trigger the fetch only when museum_id is available
-    } else {
-      console.log('museum_id is not available');
+      getStuff(); // Call the async function here
     }
   }, [museum_id]);
 
