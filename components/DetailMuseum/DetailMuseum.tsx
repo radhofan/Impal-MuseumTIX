@@ -112,7 +112,10 @@ function DetailMuseum({ museum_id }: { museum_id: number }) {
       alert('Comment cannot be empty');
       return;
     }
-    const user = JSON.parse(localStorage.getItem('user'));
+    // const user = JSON.parse(localStorage.getItem('user'));
+    const userPrev = localStorage.getItem('user');
+    const user = userPrev ? JSON.parse(userPrev) : null;
+
     if(user === null){
       alert("You must log in first!.")
       router.push('/HomePage')
