@@ -44,8 +44,10 @@ function DetailMuseum({ museum_id }: { museum_id: number }) {
   // Define the async function outside the block
   const getStuff = async () => {
     try {
-      const museumData = await fetchMuseums();  // Fetch using museum_id
+      const museumData = await fetchMuseums();  
       setMuseum(museumData);
+      const reviewsData = await fetchReviews();  
+      setReviews(reviewsData);
     } catch (error) {
       console.error('Failed to fetch museum data:', error);
     }
