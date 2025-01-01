@@ -5,7 +5,7 @@ import Footer from '../Global/Footer';
 import { configUrl } from '@/config.js';
 import { useRouter } from 'next/navigation';
 
-const Delete = ({museum_id}) => {
+const Delete = ({ museum_id }: { museum_id: number }) => {
   const router = useRouter();
 
   const handleDelete = async (e: React.FormEvent) => {
