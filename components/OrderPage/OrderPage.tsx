@@ -127,7 +127,7 @@ function OrderPage({museum_id}) {
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
     setGroupName(value); // Update the groupName state
   };
   
@@ -234,7 +234,7 @@ function OrderPage({museum_id}) {
         });
   
         if (response.ok) {
-          const result = await response.json();
+          //const result = await response.json();
           const updatedKeranjang = { ...keranjang, jumlah_tiket: 1, total_harga: 0, jenis_tiket: "Tiket Reguler" };
           updateKeranjang(updatedKeranjang);
           router.push('/MyTicket');

@@ -6,20 +6,19 @@ import Footer from '../Global/Footer';
 import { configUrl } from '@/config.js';
 import { useRouter } from 'next/navigation';
 
-const Delete = () => {
+const Delete = ({museum_id}) => {
   const router = useRouter();
-  const [museumId, setMuseumId] = useState('');
 
   const handleDelete = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!museumId) {
+    if (!museum_id) {
       alert('Museum ID is required!');
       return;
     }
 
     try {
-      const response = await fetch(`${configUrl}/admins/DeleteMuseum/${museumId}`, {
+      const response = await fetch(`${configUrl}/admins/DeleteMuseum/${museum_id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

@@ -186,7 +186,7 @@ function DetailMuseum({museum_id}) {
               <p className="review-card-title">
                 <strong>{review.user.nama}</strong> {Array(review.rating).fill('⭐').join('')}
               </p>
-              <p className="review-comment">"{review.comment}"</p>
+              <p className="review-comment">{review.comment}</p>
             </div>
           ))}
         </div>

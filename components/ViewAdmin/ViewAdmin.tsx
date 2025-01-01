@@ -47,7 +47,7 @@ const ViewAdmin = () => {
   }
 
   // Filter museums based on the search term
-  const filteredMuseums = museums.filter((museum: any) =>
+  const filteredMuseums = museums.filter((museum) =>
     museum.nama.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -75,7 +75,7 @@ const ViewAdmin = () => {
         {loading ? (
           <p>Loading museums...</p>
         ) : filteredMuseums.length > 0 ? (
-          filteredMuseums.map((museum: any) => (
+          filteredMuseums.map((museum) => (
             <div key={museum.museum_id} className="museum-item">
               {/* Remove image if not available */}
               <Image
