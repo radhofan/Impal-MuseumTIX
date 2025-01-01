@@ -3,7 +3,7 @@ const config = {
       apiUrl: "http://localhost:9090", // Local API URL
     },
     production: {
-      apiUrl: "http://mtixbackend-production.up.railway.app", // Production API URL
+      apiUrl: "https://mtixbackend-production.up.railway.app", // Production API URL
     },
   };
   
