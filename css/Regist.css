@@ -81,14 +81,13 @@
     flex-wrap: wrap;
     gap: 10px;
     justify-content: space-between;
-    border-color: gray;
   }
 
   .form-input {
     flex: 1;
     padding: 10px;
     font-size: 14px;
-    border: 1px solid #ffffff;
+    border: 1px solid grey;
     border-radius: 5px;
     width: calc(50% - 10px); /* Setengah lebar untuk input nama */
     color: black;
