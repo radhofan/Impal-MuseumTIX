@@ -12,7 +12,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { configUrl } from '@/config.js';
 
-function OrderPage({museum_id}) {
+function OrderPage({ museum_id }: { museum_id: number }) {
   const [userId, setUserId] = useState<number | null>(null);
   const [keranjang, setKeranjang] = useState(null);
   const [ticketQuantity, setTicketQuantity] = useState(1);

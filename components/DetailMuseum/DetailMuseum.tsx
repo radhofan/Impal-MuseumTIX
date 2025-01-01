@@ -12,7 +12,7 @@ import Image from 'next/image';
 import { configUrl } from '@/config.js';
 import { useRouter } from 'next/navigation';
 
-function DetailMuseum({museum_id}) {
+function DetailMuseum({ museum_id }: { museum_id: number }) {
 
   // const [museumId, setMuseumId] = useState(null);
   const [museum, setMuseum] = useState([]);
