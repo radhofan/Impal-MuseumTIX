@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation';
 
 function DetailMuseum({museum_id}) {
 
-  const [museumId, setMuseumId] = useState(null);
+  // const [museumId, setMuseumId] = useState(null);
   const [museum, setMuseum] = useState([]);
   const [reviews, setReviews] = useState([]);
   const router = useRouter();

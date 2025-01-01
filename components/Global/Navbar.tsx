@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '@/css/Navbar.css';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { configUrl } from '@/config.js';
+// import { configUrl } from '@/config.js';
 
 const Navbar = () => {
   const [user, setUser] = useState(null);

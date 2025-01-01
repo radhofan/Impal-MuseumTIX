@@ -24,7 +24,7 @@ const Edit = ({museum_id}) => {
   const [jamOperasional, setJamOperasional] = useState('');
   const [likes, setLikes] = useState(0);
 
-  const [museum, setMuseum] = useState([]);
+  // const [museum, setMuseum] = useState([]);
 
   useEffect(() => {
       if (museum_id) {

@@ -51,7 +51,7 @@ function Login() {
       } else {
         setErrorMessage('Invalid email or password');
       }
-    } catch (error) {
+    } catch {
       setErrorMessage('An error occurred during login');
     }
   };

@@ -19,7 +19,7 @@ const HomePage = () => {
 
 
   const [museums, setMuseums] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [showAll, setShowAll] = useState(false);
 

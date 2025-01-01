@@ -1,6 +1,6 @@
 import React from 'react'
 import '@/css/Footer.css';
-import { configUrl } from '@/config.js';
+// import { configUrl } from '@/config.js';
 
 const Footer = () => {
   return (
