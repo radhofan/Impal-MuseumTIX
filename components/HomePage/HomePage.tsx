@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import '@/css/Homepage.css';
 import '@/css/Navbar.css';
+import { museum as Museum} from '@/Types/types';
 
 import 'swiper/css'; 
 import 'swiper/css/pagination'; 
@@ -18,17 +19,16 @@ import { configUrl } from '@/config.js';
 const HomePage = () => {
 
 
-  const [museums, setMuseums] = useState([]);
+  const [museums, setMuseums] = useState<Museum[] | null>([]);
   // const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [showAll, setShowAll] = useState(false);
 
-  // Filter museums 
-  const filteredMuseums = museums.filter((museum) =>
+  const filteredMuseums = museums?.filter((museum) =>
     museum.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    museum.lokasi.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+    museum.lokasi?.toLowerCase().includes(searchTerm.toLowerCase())
+  ) ?? [];  // Default to an empty array if museums is null or undefined
+  
   const museumsToDisplay = showAll ? filteredMuseums : filteredMuseums.slice(0, 6);
 
   // useEffect List Musum
