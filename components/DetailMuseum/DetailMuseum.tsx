@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 
 import '@/app/globals.css'; 
-import '@/css/DetailMuseum.css';
+import '@/css/Detailmuseum.css';
 import Link from 'next/link';
 
 import Navbar from '@/components/Global/Navbar';

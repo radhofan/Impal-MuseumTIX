@@ -1,7 +1,7 @@
 // components/ViewAdmin/ViewAdmin.tsx
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import '@/css/ViewAdmin.css';
+import '@/css/Viewadmin.css';
 import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
 import Image from 'next/image';

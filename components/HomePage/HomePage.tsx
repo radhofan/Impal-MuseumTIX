@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Swiper from 'swiper';
 import Link from 'next/link';
 
-import '@/css/HomePage.css';
+import '@/css/Homepage.css';
 import '@/css/Navbar.css';
 
 import 'swiper/css'; 

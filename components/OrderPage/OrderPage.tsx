@@ -1,7 +1,7 @@
 import React, { useState, useEffect,} from 'react';
 import { useRouter } from 'next/router'; 
 import axios from 'axios'; // For making API calls
-import '@/css/OrderPage.css';
+import '@/css/Orderpage.css';
 // import '@/css/DetailTiketMuseum.css';
 import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';

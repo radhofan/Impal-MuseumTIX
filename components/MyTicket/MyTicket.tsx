@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import '@/css/MyTicket.css';
+import '@/css/Myticket.css';
 
 import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
