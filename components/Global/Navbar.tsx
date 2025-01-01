@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import '@/css/Navbar.css';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { user as User } from '@/Types/types';
 // import { configUrl } from '@/config.js';
 
 const Navbar = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
 

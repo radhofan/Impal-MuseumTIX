@@ -6,9 +6,10 @@ import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
 import Image from 'next/image';
 import { configUrl } from '@/config.js';
+import { museum as Museum} from '@/Types/types';
 
 const ViewAdmin = () => {
-  const [museums, setMuseums] = useState([]);
+  const [museums, setMuseums] = useState<Museum[]>([]); 
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -85,7 +86,7 @@ const ViewAdmin = () => {
                 alt="Museum Geologi"
                 className="card-image"
               />
-              {museum.popular && <span className="popular-badge">Popular</span>}
+              {/* {museum.popular && <span className="popular-badge">Popular</span>} */}
               <h2>{museum.nama}</h2>
               <p>Rating: ⭐ {museum.rating}</p>
               <p>📍 {museum.lokasi}</p>

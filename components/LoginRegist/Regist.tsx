@@ -19,7 +19,7 @@ function Regist() {
   const [successMessage, setSuccessMessage] = useState('');
   const router = useRouter(); 
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -28,7 +28,7 @@ function Regist() {
   };
 
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await axios.post(`${configUrl}/users/registrasi`, formData);
@@ -55,13 +55,19 @@ function Regist() {
           setErrorMessage('Invalid email or password');
         }
       }
-    } catch (error) {
-      if (error.response?.status === 409) { 
-          alert('The email is already in use. Please use a different email.');
+    } catch (error: unknown) {
+      if (error instanceof Error && 'response' in error) {
+          const axiosError = error as { response?: { status: number; data?: { message: string } } };
+          if (axiosError.response?.status === 409) {
+              alert('The email is already in use. Please use a different email.');
+          } else {
+              alert(axiosError.response?.data?.message || 'An error occurred. Please try again.');
+          }
       } else {
-          alert(error.response?.data?.message || 'An error occurred. Please try again.');
+          alert('An unknown error occurred.');
       }
-  }
+    }
+  
   };
 
   return (

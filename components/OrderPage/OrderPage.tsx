@@ -7,6 +7,7 @@ import Navbar from '@/components/Global/Navbar';
 import Footer from '@/components/Global/Footer';
 import Image from 'next/image';
 import museumGeologiImage from '../../image/museumGeologi.jpg';
+import { keranjang as Keranjang, museum as Museum, payment as Payment } from '@/Types/types';
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -14,13 +15,14 @@ import { configUrl } from '@/config.js';
 
 function OrderPage({ museum_id }: { museum_id: number }) {
   const [userId, setUserId] = useState<number | null>(null);
-  const [keranjang, setKeranjang] = useState(null);
+  const [keranjang, setKeranjang] = useState<Keranjang>();
   const [ticketQuantity, setTicketQuantity] = useState(1);
   const [totalHarga, setTotalHarga] = useState<number | null>(null);
   const [groupName, setGroupName] = useState(''); // Manage the group name based on ticket type
-  const [museum, setMuseum] = useState(null);
+  const [museum, setMuseum] = useState<Museum | null>(null);
   const router = useRouter();
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
 
 
   useEffect(() => {
@@ -44,7 +46,7 @@ function OrderPage({ museum_id }: { museum_id: number }) {
 
   useEffect(() => {
     if (userId !== null) {
-      setTotalHarga(keranjang?.total_harga)
+      setTotalHarga(keranjang?.total_harga ?? 0);
     }
   }, [keranjang]); 
   
@@ -63,7 +65,7 @@ function OrderPage({ museum_id }: { museum_id: number }) {
     }
   };
 
-  const updateKeranjang = async (updatedKeranjang) => {
+  const updateKeranjang = async (updatedKeranjang: Keranjang) => {
     try {
       const response = await axios.put(
         `${configUrl}/keranjangs/updateKeranjang/${userId}`,
@@ -75,7 +77,7 @@ function OrderPage({ museum_id }: { museum_id: number }) {
     }
   };
 
-  const fetchMuseums = async (museumId) => {
+  const fetchMuseums = async (museumId: number) => {
     try {
       const response = await fetch(`${configUrl}/museums/getSpec`, {
         method: "POST",
@@ -98,24 +100,43 @@ function OrderPage({ museum_id }: { museum_id: number }) {
   };
   
 
-  const handleTicketSelection = (jenis_tiket) => {
-    const updatedKeranjang = { ...keranjang, jenis_tiket, jumlah_tiket: 1 };
-    setKeranjang(updatedKeranjang); 
-    setTicketQuantity(1);
-    updateKeranjang(updatedKeranjang);
+  const handleTicketSelection = (jenis_tiket: string) => {
+    if (keranjang) {
+      const updatedKeranjang = { 
+        ...keranjang,
+        keranjang_id: keranjang.keranjang_id, 
+        jenis_tiket: jenis_tiket, 
+        jumlah_tiket: 1, 
+        total_harga: keranjang.total_harga, 
+        museum: keranjang.museum,
+      };
+      setKeranjang(updatedKeranjang); 
+      setTicketQuantity(1);
+      updateKeranjang(updatedKeranjang);
+    }
   };
 
-  const handleQuantityChange = (action) => {
+  const handleQuantityChange = (action: 'increase' | 'decrease') => {
     let newQuantity = ticketQuantity;
     if (action === 'increase') {
       newQuantity++;
     } else if (action === 'decrease' && ticketQuantity > 1) {
       newQuantity--;
     }
-    const updatedKeranjang = { ...keranjang, jumlah_tiket: newQuantity};
-    setKeranjang(updatedKeranjang); 
-    setTicketQuantity(newQuantity);
-    updateKeranjang(updatedKeranjang);
+    //const updatedKeranjang = { ...keranjang, jumlah_tiket: newQuantity};
+    if (keranjang) {
+      const updatedKeranjang = { 
+        ...keranjang,
+        keranjang_id: keranjang.keranjang_id, 
+        jenis_tiket: keranjang.jenis_tiket, 
+        jumlah_tiket: newQuantity, 
+        total_harga: keranjang.total_harga, 
+        museum: keranjang.museum,
+      };
+      setKeranjang(updatedKeranjang);
+      setTicketQuantity(newQuantity);
+      updateKeranjang(updatedKeranjang);
+    }
   };
 
 
@@ -126,7 +147,7 @@ function OrderPage({ museum_id }: { museum_id: number }) {
     return 'Ticket Not Selected';
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setGroupName(value); // Update the groupName state
   };
@@ -161,8 +182,8 @@ function OrderPage({ museum_id }: { museum_id: number }) {
   };
 
   const handlePayment = async () => { 
-    const storedUser = localStorage.getItem('user');
-    const parsedUser = JSON.parse(storedUser);
+    const storedUser = localStorage.getItem('user') || null;
+    const parsedUser = storedUser ? JSON.parse(storedUser) : null;
     const paymentData = {
       metode_pembayaran: selectedPayment,
       bank: selectedPayment === "Transfer Bank" || selectedPayment === "Virtual Account" ? selectedBank : null,
@@ -198,12 +219,16 @@ function OrderPage({ museum_id }: { museum_id: number }) {
         const error = await response.text();
         alert(`Payment failed: ${error}`);
       }
-    } catch (error) {
-      alert(`Payment error: ${error.message}`);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(`Payment error: ${error.message}`);
+      } else {
+        alert('An unknown error occurred');
+      }
     }
   };
 
-  const createTicketAfterPayment = async (payment) => {
+  const createTicketAfterPayment = async (payment: Payment) => {
     let call = "";
     if (keranjang?.jenis_tiket === 'Tiket Pelajar') call = "tiketpelajars";
     if (keranjang?.jenis_tiket === 'Tiket Keluarga') call = "tiketkeluargas";
@@ -235,9 +260,19 @@ function OrderPage({ museum_id }: { museum_id: number }) {
   
         if (response.ok) {
           //const result = await response.json();
-          const updatedKeranjang = { ...keranjang, jumlah_tiket: 1, total_harga: 0, jenis_tiket: "Tiket Reguler" };
-          updateKeranjang(updatedKeranjang);
-          router.push('/MyTicket');
+          if (keranjang) {
+            const updatedKeranjang = { 
+              ...keranjang,
+              keranjang_id: keranjang.keranjang_id, 
+              jenis_tiket: "Tiket Reguler", 
+              jumlah_tiket: 1, 
+              total_harga: 0, 
+              museum: keranjang.museum,
+            };
+            updateKeranjang(updatedKeranjang);
+            router.push('/MyTicket');
+          }
+          //const updatedKeranjang = { ...keranjang, jumlah_tiket: 1, total_harga: 0, jenis_tiket: "Tiket Reguler" };
         } else {
           const error = await response.text();
           alert(`Ticket creation failed: ${error}`);
@@ -245,15 +280,19 @@ function OrderPage({ museum_id }: { museum_id: number }) {
         }
       }
       alert(`${ticketCount} tickets created successfully!`);
-    } catch (error) {
-      alert(`Ticket creation error: ${error.message}`);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(`Ticket Creation!: ${error.message}`);
+      } else {
+        alert('An unknown error occurred');
+      }
     }
   };
   
   const mapApi= () => {
     // Hardcoded location for the example (latitude, longitude)
-    const latitude = -6.900917;
-    const longitude = 107.621361; 
+    const latitude = museum?.latitude;
+    const longitude = museum?.longitude; 
 
     // Open Google Maps with the specified coordinates
     const url = `https://www.google.com/maps?q=${latitude},${longitude}`;

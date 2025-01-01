@@ -36,7 +36,6 @@ const HomePage = () => {
       async function getMuseums() {
           const data = await fetchMuseums();
           setMuseums(data);
-          setLoading(false); 
       }
 
       getMuseums(); 

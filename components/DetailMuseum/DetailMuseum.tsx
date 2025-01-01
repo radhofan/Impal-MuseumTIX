@@ -1,5 +1,6 @@
 // Updated DetailMuseum.tsx
 import React, { useEffect, useState } from 'react';
+import { museum as Museum, review as Review } from '@/Types/types';
 
 import '@/app/globals.css'; 
 import '@/css/Detailmuseum.css';
@@ -15,8 +16,8 @@ import { useRouter } from 'next/navigation';
 function DetailMuseum({ museum_id }: { museum_id: number }) {
 
   // const [museumId, setMuseumId] = useState(null);
-  const [museum, setMuseum] = useState([]);
-  const [reviews, setReviews] = useState([]);
+  const [museum, setMuseum] = useState<Museum | null>(null);  // For a single Museum object, initialized to null
+  const [reviews, setReviews] = useState<Review[]>([]); 
   const router = useRouter();
 
   //  // Directly fetch data when museum_id is available

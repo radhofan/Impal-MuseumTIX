@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { keranjang as Keranjang, tiket_keluarga as TiketKeluarga, tiket_pelajar as TiketPelajar, tiket_reguler as TiketReguler, payment as Payment } from '@/Types/types';
 import '@/css/Myticket.css';
 
 import Navbar from '@/components/Global/Navbar';
@@ -8,7 +9,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import { configUrl } from '@/config.js';
 
-const TicketCard = ({ ticket }) => {
+const TicketCard = ({ ticket }: { ticket: TiketKeluarga | TiketPelajar | TiketReguler }) => {
 
   const cancelTicket = async () => {
     try {
@@ -36,7 +37,7 @@ const TicketCard = ({ ticket }) => {
    return (
     <div className="ticket-card">
       <div className="ticket-date">
-        {ticket.payment?.tanggal_pembayaran || "Date not available"}
+        {new Date(ticket.payment.tanggal_pembayaran).toLocaleDateString()}
       </div>
       <div className="ticket-info-container">
         <Image
@@ -50,7 +51,7 @@ const TicketCard = ({ ticket }) => {
           <div className="ticket-museum-name">{ticket.museum?.nama}</div>
           <div className="ticket-type">{ticket.jenis_tiket}</div>
           <div className="ticket-location">{ticket.museum?.lokasi}</div>
-          <div className="ticket-location">{ticket.tanggal_kunjungan}</div>
+          <div className="ticket-location">{new Date(ticket.payment.tanggal_pembayaran).toLocaleDateString()}</div>
         </div>
         <div className="ticket-summary">
           <div className="ticket-quantity">
@@ -78,15 +79,15 @@ function MyTicket() {
   // const [status, setStatus] = useState('Upcoming'); // Default status
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [keranjang, setKeranjang] = useState(null);
+  const [keranjang, setKeranjang] = useState<Keranjang | null>(null);
   const [userId, setUserId] = useState<number | null>(null);
 
-  const [tiketRegulers, setTiketRegulers] = useState([]);
-  const [tiketKeluargas, setTiketKeluargas] = useState([]);
-  const [tiketPelajars, setTiketPelajars] = useState([]);
+  const [tiketRegulers, setTiketRegulers] = useState<TiketReguler[]>([]); 
+  const [tiketKeluargas, setTiketKeluargas] = useState<TiketKeluarga[]>([]); 
+  const [tiketPelajars, setTiketPelajars] = useState<TiketPelajar[]>([]); 
 
   // const [activeTickets, setActiveTickets] = useState([]);
-  const [payments, setPayments] = useState([]);  // For storing payment history
+  const [payments, setPayments] = useState<Payment[]>([]);  // For storing payment history
   const [showPayments, setShowPayments] = useState(false); 
   const router = useRouter();
 
@@ -173,7 +174,7 @@ function MyTicket() {
       setTiketRegulers(tiketRegulers);
     
     } catch {
-      setError(err.message);
+      setError("Gagal");
     } finally {
       setLoading(false);
     }
@@ -183,7 +184,7 @@ function MyTicket() {
   };
 
   const [activeStatus, setActiveStatus] = useState("Upcoming");
-
+  
   const combinedTickets = [...tiketRegulers, ...tiketPelajars, ...tiketKeluargas];
   const filteredTickets = combinedTickets.filter(ticket => ticket.status === activeStatus);
   

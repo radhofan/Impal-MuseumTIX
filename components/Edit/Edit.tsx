@@ -32,34 +32,60 @@ const Edit = ({ museum_id }: { museum_id: number }) => {
       }
   }, [museum_id]);
 
-  useEffect(() => {
-      if (museumId) {
-        async function getMuseums() {
-          const data = await fetchMuseums();
-          if (data) {
-            setMuseum(data);
+  // useEffect(() => {
+  //     if (museumId) {
+  //       async function getMuseums() {
+  //         const data = await fetchMuseums();
+  //         if (data) {
+  //           setMuseum(data);
 
-            // Set placeholders
-            setNama(data.nama || '');
-            setLokasi(data.lokasi || '');
-            setNoTelpon(data.no_telpon || '');
-            setKeterangan(data.keterangan || '');
-            setRating(data.rating || 0);
-            setJumlahTiket(data.jumlah_tiket || 0);
-            setTiketRegulerPrice(data.tiket_reguler_price || 0);
-            setTiketPelajarPrice(data.tiket_pelajar_price || 0);
-            setTiketKeluargaPrice(data.tiket_keluarga_price || 0);
+  //           // Set placeholders
+  //           setNama(data.nama || '');
+  //           setLokasi(data.lokasi || '');
+  //           setNoTelpon(data.no_telpon || '');
+  //           setKeterangan(data.keterangan || '');
+  //           setRating(data.rating || 0);
+  //           setJumlahTiket(data.jumlah_tiket || 0);
+  //           setTiketRegulerPrice(data.tiket_reguler_price || 0);
+  //           setTiketPelajarPrice(data.tiket_pelajar_price || 0);
+  //           setTiketKeluargaPrice(data.tiket_keluarga_price || 0);
             
-            // Set values for the new fields
-            setLongitude(data.longitude || '');
-            setLatitude(data.latitude || '');
-            setJamOperasional(data.jam_operasional || '');
-            setLikes(data.likes || 0)
-          }
-        }
+  //           // Set values for the new fields
+  //           setLongitude(data.longitude || '');
+  //           setLatitude(data.latitude || '');
+  //           setJamOperasional(data.jam_operasional || '');
+  //           setLikes(data.likes || 0)
+  //         }
+  //       }
 
-        getMuseums(); 
-      }
+  //       getMuseums(); 
+  //     }
+  // }, [museumId]);
+
+  // Define async function outside of useEffect
+  const getMuseums = async () => {
+    const data = await fetchMuseums();
+    if (data) {
+      setNama(data.nama || '');
+      setLokasi(data.lokasi || '');
+      setNoTelpon(data.no_telpon || '');
+      setKeterangan(data.keterangan || '');
+      setRating(data.rating || 0);
+      setJumlahTiket(data.jumlah_tiket || 0);
+      setTiketRegulerPrice(data.tiket_reguler_price || 0);
+      setTiketPelajarPrice(data.tiket_pelajar_price || 0);
+      setTiketKeluargaPrice(data.tiket_keluarga_price || 0);
+      setLongitude(data.longitude || '');
+      setLatitude(data.latitude || '');
+      setJamOperasional(data.jam_operasional || '');
+      setLikes(data.likes || 0);
+    }
+  };
+
+  useEffect(() => {
+    if (museumId) {
+      getMuseums(); // Call the function inside the effect
+    }
   }, [museumId]);
 
   async function fetchMuseums() {

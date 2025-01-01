@@ -16,7 +16,7 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();  
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -24,7 +24,7 @@ function Login() {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
   
     const isAdmin = formData.email.endsWith('@mtix.com'); // Check if email ends with @mtix.com
