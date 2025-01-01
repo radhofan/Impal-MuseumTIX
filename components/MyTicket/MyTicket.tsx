@@ -8,7 +8,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import { configUrl } from '@/config.js';
 
-const TicketCard = ({ ticket }: { ticket: any}) => {
+const TicketCard = ({ ticket }) => {
 
   const cancelTicket = async () => {
     try {
@@ -74,8 +74,8 @@ const TicketCard = ({ ticket }: { ticket: any}) => {
 
 
 function MyTicket() {
-  const [tickets, setTickets] = useState([]);
-  const [status, setStatus] = useState('Upcoming'); // Default status
+  // const [tickets, setTickets] = useState([]);
+  // const [status, setStatus] = useState('Upcoming'); // Default status
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [keranjang, setKeranjang] = useState(null);
@@ -85,7 +85,7 @@ function MyTicket() {
   const [tiketKeluargas, setTiketKeluargas] = useState([]);
   const [tiketPelajars, setTiketPelajars] = useState([]);
 
-  const [activeTickets, setActiveTickets] = useState([]);
+  // const [activeTickets, setActiveTickets] = useState([]);
   const [payments, setPayments] = useState([]);  // For storing payment history
   const [showPayments, setShowPayments] = useState(false); 
   const router = useRouter();
@@ -172,7 +172,7 @@ function MyTicket() {
       const tiketRegulers = await tiketRegulerResponse.json();
       setTiketRegulers(tiketRegulers);
     
-    } catch (err: any) {
+    } catch {
       setError(err.message);
     } finally {
       setLoading(false);
@@ -206,7 +206,7 @@ function MyTicket() {
         const data = await response.json();
         console.log(data)
         setPayments(data);
-      } catch (error) {
+      } catch  {
         setError('Failed to load payment history');
       }
     };

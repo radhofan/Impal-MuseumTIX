@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import '@/css/Delete.css'; // Ensure the path to CSS is correct
 import Navbar from '../Global/Navbar';
 import Footer from '../Global/Footer';
