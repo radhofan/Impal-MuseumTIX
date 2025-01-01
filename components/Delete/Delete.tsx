@@ -83,7 +83,7 @@ const Delete = ({ museum_id }: { museum_id: number }) => {
             Museum<span className="tix">Tix</span>
           </div>
           <h1>Delete Museum</h1>
-          {museums && <p>Type <strong>{museums.nama}</strong> below to confirm deletion.</p>}
+          {museums && <p>Ketik Nama Museum yang akan dihapus:<strong>{museums.nama}</strong></p>}
           {error && <p className="error-message">{error}</p>}
         </div>
 

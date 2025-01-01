@@ -75,34 +75,49 @@ body {
     gap: 20px;
   }
   
-  .add-button,
-  .cancel-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px; /* Membuat tombol lebih bulat */
-    cursor: pointer;
-    font-size: 16px;
+  .cancel-button,
+.add-button {
+  padding: 10px 20px; /* Button size */
+  border: none; /* No border */
+  border-radius: 10px; /* Rounded corners */
+  font-size: 16px; /* Font size */
+  cursor: pointer; /* Pointer on hover */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+}
+
+.add-button {
+  background-color: #f44336; /* Red background */
+  color: white; /* White text */
+}
+
+.add-button:hover {
+  background-color: #e53935; /* Darker red on hover */
+}
+
+.cancel-button {
+  background-color: white; /* White background */
+  color: black; /* Black text */
+  border: 1px solid #ccc; /* Light border */
+}
+
+.cancel-button:hover {
+  background-color: #f44336; /* Red background on hover */
+  color: white; /* White text on hover */
+}
+  
+
+  .input-field {
+    width: 100%; /* Full width */
+    padding: 10px; /* Inner padding */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 10px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+    margin-bottom: 20px; /* Spacing below the input field */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: border-color 0.3s ease; /* Smooth transition for focus effect */
   }
   
-  .add-button {
-    background-color: #f44336; /* Warna merah */
-    color: white;
-    transition: background-color 0.3s ease;
+  .input-field:focus {
+    border-color: #f44336; /* Highlighted border on focus */
+    outline: none; /* Remove default outline */
   }
-  
-  .add-button:hover {
-    background-color: #e53935; /* Merah lebih gelap saat hover */
-  }
-  
-  .cancel-button {
-    background-color: white; /* Warna putih */
-    color: black;
-    border: 1px solid #ccc; /* Border untuk tombol cancel */
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  
-  .cancel-button:hover {
-    background-color: #f44336; /* Abu-abu saat hover */
-    color: white;
-  }
-  
