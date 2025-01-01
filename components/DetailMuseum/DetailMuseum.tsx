@@ -1,4 +1,3 @@
-// Updated DetailMuseum.tsx
 import React, { useEffect, useState } from 'react';
 import { museum as Museum, review as Review } from '@/Types/types';
 
@@ -15,34 +14,10 @@ import { useRouter } from 'next/navigation';
 
 function DetailMuseum({ museum_id }: { museum_id: number }) {
 
-  // const [museumId, setMuseumId] = useState(null);
-  const [museum, setMuseum] = useState<Museum | null>(null);  // For a single Museum object, initialized to null
+  const [museum, setMuseum] = useState<Museum | null>(null);  
   const [reviews, setReviews] = useState<Review[]>([]); 
   const router = useRouter();
 
-  //  // Directly fetch data when museum_id is available
-  // useEffect(() => {
-  //   // Only call the async function if museum_id is available
-  //   if (museum_id) {
-  //     async function getStuff() {
-  //       try {
-  //         const museumData = await fetchMuseums();  // Fetch using museum_id
-  //         setMuseum(museumData);
-
-  //         const reviewsData = await fetchReviews();  // Fetch using museum_id
-  //         setReviews(reviewsData);
-  //       } catch (error) {
-  //         console.error("Error fetching museum and reviews:", error);
-  //       }
-  //     }
-
-  //     getStuff(); // Trigger the fetch only when museum_id is available
-  //   } else {
-  //     console.log('museum_id is not available');
-  //   }
-  // }, [museum_id]);
-
-  // Define the async function outside the block
   const getStuff = async () => {
     try {
       const museumData = await fetchMuseums();  
@@ -54,22 +29,20 @@ function DetailMuseum({ museum_id }: { museum_id: number }) {
     }
   };
 
-  // Only call the async function if museum_id is available
   useEffect(() => {
     if (museum_id) {
-      getStuff(); // Call the async function here
+      getStuff(); 
     }
   }, [museum_id]);
 
   async function fetchMuseums() {
     try {
-      // Send a POST request with museumId in the body
       const response = await fetch(`${configUrl}/museums/getSpec`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: museum_id }), // Pass the museumId in the request body
+        body: JSON.stringify({ id: museum_id }), 
       });
 
       if (!response.ok) {
@@ -85,7 +58,6 @@ function DetailMuseum({ museum_id }: { museum_id: number }) {
 
   async function fetchReviews() {
     try {
-      // Send a POST request with museumId in the body
       const response = await fetch(`${configUrl}/reviews/getAllMuseumReviews/${museum_id}`, {
         method: "GET",
         headers: {
@@ -113,7 +85,6 @@ function DetailMuseum({ museum_id }: { museum_id: number }) {
       alert('Comment cannot be empty');
       return;
     }
-    // const user = JSON.parse(localStorage.getItem('user'));
     const userPrev = localStorage.getItem('user');
     const user = userPrev ? JSON.parse(userPrev) : null;
 
@@ -152,13 +123,11 @@ function DetailMuseum({ museum_id }: { museum_id: number }) {
   };
 
   const mapApi= () => {
-    // Hardcoded location for the example (latitude, longitude)
     const latitude = museum?.latitude;
-    const longitude = museum?.longitude; // Coordinates of the Empire State Building
+    const longitude = museum?.longitude; 
 
-    // Open Google Maps with the specified coordinates
     const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
-    window.open(url, "_blank"); // Open in a new tab
+    window.open(url, "_blank"); 
   };
 
 
@@ -167,11 +136,10 @@ function DetailMuseum({ museum_id }: { museum_id: number }) {
     <div className="detailmuseum-body">
       <Navbar />
       <div className="detailmuseum-section1">
-        {/* Museum Information Section */}
         <div className="museum-info">
           <div className="img">
             <Image
-              src="/images/Museum_Geologi.jpg" // Ensure the image path matches your project structure
+              src="/images/Museum_Geologi.jpg" 
               width={500}
               height={500}
               alt="Museum Geologi"
@@ -201,7 +169,6 @@ function DetailMuseum({ museum_id }: { museum_id: number }) {
           </div>
         </div>
 
-        {/* Reviews Section */}
         <div className="reviews">
           <h3 className="reviews-title">Reviews for {museum?.nama}</h3>
           {reviews.map((review, index) => (
@@ -215,7 +182,6 @@ function DetailMuseum({ museum_id }: { museum_id: number }) {
         </div>
       </div>
 
-        {/* Add Comment Section */}
         <div className="add-comment">
           <h3>Add a Comment</h3>
           <textarea

@@ -27,10 +27,10 @@ function Login() {
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
   
-    const isAdmin = formData.email.endsWith('@mtix.com'); // Check if email ends with @mtix.com
+    const isAdmin = formData.email.endsWith('@mtix.com'); 
     const apiUrl = isAdmin 
-      ? `${configUrl}/admins/login` // Admin login API
-      : `${configUrl}/users/login`; // User login API
+      ? `${configUrl}/admins/login` 
+      : `${configUrl}/users/login`; 
   
     try {
       const response = await fetch(apiUrl, {  
@@ -46,7 +46,7 @@ function Login() {
   
         localStorage.setItem('user', JSON.stringify(userData));
   
-        const redirectPage = isAdmin ? '/ViewAdmin' : '/HomePage'; // Redirect based on user type
+        const redirectPage = isAdmin ? '/ViewAdmin' : '/HomePage'; 
         router.push(redirectPage);
       } else {
         setErrorMessage('Invalid email or password');

@@ -20,18 +20,16 @@ const HomePage = () => {
 
 
   const [museums, setMuseums] = useState<Museum[] | null>([]);
-  // const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [showAll, setShowAll] = useState(false);
 
   const filteredMuseums = museums?.filter((museum) =>
     museum.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
     museum.lokasi?.toLowerCase().includes(searchTerm.toLowerCase())
-  ) ?? [];  // Default to an empty array if museums is null or undefined
+  ) ?? [];  
   
   const museumsToDisplay = showAll ? filteredMuseums : filteredMuseums.slice(0, 6);
 
-  // useEffect List Musum
   useEffect(() => {
       async function getMuseums() {
           const data = await fetchMuseums();
@@ -59,7 +57,6 @@ const HomePage = () => {
     }
   }
   
-  // useEffect Swiper
   useEffect(() => {
     const swiper = new Swiper('.swiper-container', {
       direction: 'vertical',
@@ -82,7 +79,7 @@ const HomePage = () => {
 
     const updateProgressCircles = () => {
       const circles = document.querySelectorAll('.swiper-progress .circle');
-      if (circles.length === 0) return; // Safeguard: Ensure circles exist
+      if (circles.length === 0) return;
 
       circles.forEach((circle) => {
         circle.classList.remove('active');
@@ -103,9 +100,8 @@ const HomePage = () => {
 
     swiper.on('slideChange', updateProgressCircles);
 
-    updateProgressCircles(); // Initial update
+    updateProgressCircles(); 
 
-    // Cleanup on unmount
     return () => {
       progressCircles.forEach((circle, index) => {
         circle.removeEventListener('click', () => {
@@ -161,7 +157,6 @@ const HomePage = () => {
       <div className='homepage-section2'>
 
 
-        {/* Search Bar and Input */}
         <div className='homepage-section2-top'>
           <div className='homepage-section2-top-left'>
             <div className='homepage-section2-top-left-title'>Museum List</div>
@@ -173,23 +168,21 @@ const HomePage = () => {
                 type='text'
                 placeholder='Search...'
                 className='search-input'
-                value={searchTerm} // Controlled input
-                onChange={(e) => setSearchTerm(e.target.value)} // Update state on change
+                value={searchTerm} 
+                onChange={(e) => setSearchTerm(e.target.value)} 
               />
             </div>
             <div className='homepage-section2-top-right-button'>Search</div>
           </div>
         </div>
 
-        {/* Museums List */}
         <div className='homepage-section2-list'>
           {museumsToDisplay.length > 0 ? (
             museumsToDisplay.map((museum, index) => (
               <Link key={index} href={`/DetailMuseum/${museum.museum_id}`} passHref>
                 <div className='card'>
-                  {/* <div className='card-image'></div> */}
                   <Image
-                    src="/images/Museum_Geologi.jpg" // Ensure the image path matches your project structure
+                    src="/images/Museum_Geologi.jpg" 
                     width={500}
                     height={500}
                     alt="Museum Geologi"
@@ -211,7 +204,6 @@ const HomePage = () => {
             <div>No museums found</div>
           )}
         </div>
-        {/* Button container */}
         {filteredMuseums.length > 6 && (
           <div className='button-container'>
             <button

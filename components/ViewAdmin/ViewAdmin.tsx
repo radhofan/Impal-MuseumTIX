@@ -1,4 +1,3 @@
-// components/ViewAdmin/ViewAdmin.tsx
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import '@/css/Viewadmin.css';
@@ -13,7 +12,6 @@ const ViewAdmin = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // Fetch museums from the API when the component is mounted
   useEffect(() => {
     async function getMuseums() {
       const data = await fetchMuseums();
@@ -24,7 +22,6 @@ const ViewAdmin = () => {
     getMuseums(); 
   }, []);
 
-  // Fetch museums function
   async function fetchMuseums() {
     try {
       const response = await fetch(`${configUrl}/museums/getAll`, {
@@ -43,11 +40,10 @@ const ViewAdmin = () => {
       return museums;
     } catch (error) {
       console.error('Error fetching museums:', error);
-      return []; // Return an empty array in case of an error
+      return []; 
     }
   }
 
-  // Filter museums based on the search term
   const filteredMuseums = museums.filter((museum) =>
     museum.nama.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -78,9 +74,8 @@ const ViewAdmin = () => {
         ) : filteredMuseums.length > 0 ? (
           filteredMuseums.map((museum) => (
             <div key={museum.museum_id} className="museum-item">
-              {/* Remove image if not available */}
               <Image
-                src="/images/Museum_Geologi.jpg" // Ensure the image path matches your project structure
+                src="/images/Museum_Geologi.jpg" 
                 width={500}
                 height={500}
                 alt="Museum Geologi"

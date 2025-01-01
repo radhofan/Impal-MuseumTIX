@@ -71,7 +71,7 @@ function OrderPage({ museum_id }: { museum_id: number }) {
         `${configUrl}/keranjangs/updateKeranjang/${userId}`,
         updatedKeranjang
       );
-      setKeranjang(response.data); // Update keranjang state
+      setKeranjang(response.data); 
     } catch (error) {
       console.error('Error updating keranjang:', error);
     }
@@ -84,7 +84,7 @@ function OrderPage({ museum_id }: { museum_id: number }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: museumId }), // Pass the museumId in the request body
+        body: JSON.stringify({ id: museumId }), 
       });
 
       if (!response.ok) {
@@ -123,7 +123,6 @@ function OrderPage({ museum_id }: { museum_id: number }) {
     } else if (action === 'decrease' && ticketQuantity > 1) {
       newQuantity--;
     }
-    //const updatedKeranjang = { ...keranjang, jumlah_tiket: newQuantity};
     if (keranjang) {
       const updatedKeranjang = { 
         ...keranjang,
@@ -149,7 +148,7 @@ function OrderPage({ museum_id }: { museum_id: number }) {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    setGroupName(value); // Update the groupName state
+    setGroupName(value); 
   };
   
 
@@ -211,7 +210,6 @@ function OrderPage({ museum_id }: { museum_id: number }) {
         const result = await response.json();
         alert("Payment successful!");
   
-        // After payment is successful, create the ticket
         await createTicketAfterPayment(result);
   
         handleClose(); 
@@ -259,7 +257,6 @@ function OrderPage({ museum_id }: { museum_id: number }) {
         });
   
         if (response.ok) {
-          //const result = await response.json();
           if (keranjang) {
             const updatedKeranjang = { 
               ...keranjang,
@@ -272,7 +269,7 @@ function OrderPage({ museum_id }: { museum_id: number }) {
             updateKeranjang(updatedKeranjang);
             router.push('/MyTicket');
           }
-          //const updatedKeranjang = { ...keranjang, jumlah_tiket: 1, total_harga: 0, jenis_tiket: "Tiket Reguler" };
+        
         } else {
           const error = await response.text();
           alert(`Ticket creation failed: ${error}`);
@@ -290,24 +287,21 @@ function OrderPage({ museum_id }: { museum_id: number }) {
   };
   
   const mapApi= () => {
-    // Hardcoded location for the example (latitude, longitude)
     const latitude = museum?.latitude;
     const longitude = museum?.longitude; 
 
-    // Open Google Maps with the specified coordinates
     const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
-    window.open(url, "_blank"); // Open in a new tab
+    window.open(url, "_blank"); 
   };
 
   return (
     <div className="orderpage-body">
       <Navbar />
       <div className="detailmuseum-section1">
-        {/* Museum Information Section */}
         <div className="museum-info">
           <div className="img">
             <Image
-              src={museumGeologiImage} // Ensure the image path matches your project structure
+              src={museumGeologiImage} 
               width={500}
               height={500}
               alt="Museum Geologi"
@@ -350,7 +344,7 @@ function OrderPage({ museum_id }: { museum_id: number }) {
 
             <div className="museumTiket">
               <Image
-                src="/images/Museum_Geologi.jpg" // Ensure the image path matches your project structure
+                src="/images/Museum_Geologi.jpg" 
                 width={100}
                 height={100}
                 alt="Museum Geologi"
@@ -371,7 +365,7 @@ function OrderPage({ museum_id }: { museum_id: number }) {
 
             <div className="museumTiket">
               <Image
-                src="/images/Museum_Geologi.jpg" // Ensure the image path matches your project structure
+                src="/images/Museum_Geologi.jpg" 
                 width={100}
                 height={100}
                 alt="Museum Geologi"
@@ -392,7 +386,7 @@ function OrderPage({ museum_id }: { museum_id: number }) {
 
             <div className="museumTiket">
               <Image
-                src="/images/Museum_Geologi.jpg"  // Ensure the image path matches your project structure
+                src="/images/Museum_Geologi.jpg"  
                 width={100}
                 height={100}
                 alt="Museum Geologi"
@@ -485,7 +479,7 @@ function OrderPage({ museum_id }: { museum_id: number }) {
                 dateFormat="yyyy/MM/dd"
                 placeholderText="Select a date"
                 minDate={new Date()}
-                className="custom-date-picker" // Add a custom class for styling
+                className="custom-date-picker" 
               />
               <style>
                 {`

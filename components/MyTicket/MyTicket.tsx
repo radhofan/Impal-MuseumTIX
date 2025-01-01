@@ -75,8 +75,6 @@ const TicketCard = ({ ticket }: { ticket: TiketKeluarga | TiketPelajar | TiketRe
 
 
 function MyTicket() {
-  // const [tickets, setTickets] = useState([]);
-  // const [status, setStatus] = useState('Upcoming'); // Default status
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [keranjang, setKeranjang] = useState<Keranjang | null>(null);
@@ -86,8 +84,7 @@ function MyTicket() {
   const [tiketKeluargas, setTiketKeluargas] = useState<TiketKeluarga[]>([]); 
   const [tiketPelajars, setTiketPelajars] = useState<TiketPelajar[]>([]); 
 
-  // const [activeTickets, setActiveTickets] = useState([]);
-  const [payments, setPayments] = useState<Payment[]>([]);  // For storing payment history
+  const [payments, setPayments] = useState<Payment[]>([]);  
   const [showPayments, setShowPayments] = useState(false); 
   const router = useRouter();
 
@@ -159,7 +156,6 @@ function MyTicket() {
       const tiketKeluargas = await tiketKeluargaResponse.json();
       setTiketKeluargas(tiketKeluargas);
     
-      // API call for tiket_regulers
       const tiketRegulerResponse = await fetch(`${configUrl}/tiketregulers/status/${keranjang?.keranjang_id}`, {
         method: 'GET',
         headers: {
@@ -198,11 +194,9 @@ function MyTicket() {
     fetchTickets();
   }, [keranjang]);
 
-  // Function to fetch payments (payment history)
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        // Replace with your actual API call for payment history
         const response = await fetch(`${configUrl}/payments/viewUserHistory/${keranjang?.keranjang_id}`);
         const data = await response.json();
         console.log(data)
@@ -244,7 +238,6 @@ function MyTicket() {
               Finished
             </button>
 
-            {/* Add button for payment history */}
             <button
               className={`menu-button ${showPayments ? 'active' : ''}`}
               onClick={() => setShowPayments(!showPayments)}
@@ -257,12 +250,10 @@ function MyTicket() {
             {loading && <p>Loading tickets...</p>}
             {error && <p className="error-message">{error}</p>}
 
-            {/* Show either ticket list or payment history */}
             {!loading && !showPayments && filteredTickets.length === 0 && (
               <p>No tickets found for {activeStatus} status.</p>
             )}
 
-            {/* Display tickets */}
             {!loading && !showPayments && filteredTickets.length > 0 && (
               <div className="ticket-grid">
                 {filteredTickets.map(ticket => (
@@ -271,7 +262,6 @@ function MyTicket() {
               </div>
             )}
 
-            {/* Display payment history */}
             {!loading && showPayments && payments.length === 0 && <p>No payment history found.</p>}
             {!loading && showPayments && payments.length > 0 && (
               <div className="payment-history">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '@/css/Add.css'; // Ensure the path to CSS is correct
+import '@/css/Add.css'; 
 import Navbar from '../Global/Navbar';
 import Footer from '../Global/Footer';
 
