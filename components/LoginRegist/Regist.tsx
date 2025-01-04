@@ -32,10 +32,8 @@ function Regist() {
     e.preventDefault();
 
 
-    const emptyFields = Object.entries(formData).filter(([_, value]) => !value.trim());
-    
-    if (emptyFields.length > 0) {
-      alert("Email and Password are required!");
+    if (!formData.nama || !formData.no_telpon || !formData.alamat || !formData.email || !formData.password) {
+      alert("All fields are required!");
       return;
     }
 
