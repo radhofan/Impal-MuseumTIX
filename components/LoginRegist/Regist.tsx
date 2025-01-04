@@ -30,6 +30,15 @@ function Regist() {
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+
+    const emptyFields = Object.entries(formData).filter(([_, value]) => !value.trim());
+    
+    if (emptyFields.length > 0) {
+      alert("Email and Password are required!");
+      return;
+    }
+
     try {
       const response = await axios.post(`${configUrl}/users/registrasi`, formData);
       if (response.status === 200) {
@@ -49,7 +58,7 @@ function Regist() {
           const userData = await loginResponse.json();
           console.log(userData);
           localStorage.setItem('user', JSON.stringify(userData));
-
+          alert("Registration Successfull");
           router.push('/HomePage');
         } else {
           setErrorMessage('Invalid email or password');
@@ -79,7 +88,7 @@ function Regist() {
         </div>
         <div className="form-card">
           <div className="form-header">
-            <h1 className="form-title">Museum<span className="highlight">Tix</span></h1>
+            <h1 className="form-title">Museum <span className="highlight">Tix</span></h1>
             <h2 className="form-subtitle">Sign Up Account</h2>
             <p className="form-description">Enter your personal data to create your account.</p>
           </div>
